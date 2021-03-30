@@ -51,7 +51,7 @@ const LoginPage = () => {
 
 	return (
 		<>
-			<Header signedIn={signedIn} />
+			<Header signedIn={signedIn} signOut={setSignedIn} />
 			<StyledLoginPage>
 				<LoginForm
 					loginFormChange={updateLoginForm}

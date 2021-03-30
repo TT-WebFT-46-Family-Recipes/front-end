@@ -14,23 +14,41 @@ const StyledHeader = styled.header`
 	}
 
 	div {
-		padding-top: 1.7%;
-		padding-right: 5%;
+		width: 50%;
+		display: flex;
+		align-items: center;
+		justify-content: flex-end;
 	}
 
 	a {
-		font-size: 1.5rem;
+		width: 20%;
+		text-align: center;
+		padding: 1% 0;
+		font-size: 1.1rem;
 		text-decoration: none;
+		color: #ffffff;
+		margin-right: 5%;
+		border: 2px solid;
+		border-radius: 25px;
+		background-color: #fb5c7c;
+		/* fb5c7c */
+		/* fcb69f */
+		font-weight: 500;
+		font-family: "Ubuntu", sans-serif;
 	}
 `;
 
-const Header = ({ signedIn }) => {
+const Header = ({ signedIn, signOut }) => {
 	return (
 		<StyledHeader>
 			<img src={img} alt="secret family recipes logo"></img>
 			<div>
 				<NavLink to="/">Home</NavLink>
-				{!signedIn ? null : <NavLink to="/">Dashboard</NavLink>}
+				{!signedIn ? null : (
+					<NavLink to="/" onClick={() => signOut(!signedIn)}>
+						Log Out
+					</NavLink>
+				)}
 			</div>
 		</StyledHeader>
 	);
