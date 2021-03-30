@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import StyledForm from "./formStyles";
+import StyledForm from "./StyledForm";
 
 export const LoginForm = ({
 	loginFormChange,
@@ -11,7 +11,7 @@ export const LoginForm = ({
 }) => {
 	const [clicked, setClicked] = useState(false);
 
-	// displays the register form drawer or hides it
+	// used to set css classes and do things like: hide/show drawer which contains register form
 	const click = () => {
 		setClicked(!clicked);
 	};
@@ -24,10 +24,10 @@ export const LoginForm = ({
 	};
 
 	return (
-		<StyledForm>
+		<StyledForm clicked={clicked}>
 			<div
 				className={clicked ? "form-toggle visible" : "form-toggle"}
-				onClick={click}
+				onClick={clicked ? click : null}
 			></div>
 			<div
 				className={clicked ? "form-panel one hidden" : "form-panel one"}

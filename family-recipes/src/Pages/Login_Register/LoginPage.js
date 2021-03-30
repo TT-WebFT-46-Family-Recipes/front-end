@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { LoginForm } from "./LoginForm";
 import styled from "styled-components";
-import img from "./Assets/loginbackground.jpg";
+import img from "../../Assets/loginbackground.jpg";
 
 const StyledLoginPage = styled.section`
 	background-image: url(${img});
@@ -47,7 +47,6 @@ const LoginPage = () => {
 
 	return (
 		<>
-			{/* <h1 align="center">Header here</h1> */}
 			<StyledLoginPage>
 				<LoginForm
 					loginFormChange={updateLoginForm}

@@ -4,7 +4,7 @@ const StyledForm = styled.div`
 	background-color: #ffffff;
 	font-family: "Ubuntu", sans-serif;
 
-	top: 25%; // 17%
+	top: 17%;
 	left: 57%;
 	width: 30%;
 
@@ -121,7 +121,7 @@ const StyledForm = styled.div`
 		background: #ffffff;
 		border-radius: 100%;
 		opacity: 0;
-		cursor: pointer;
+		cursor: ${(props) => (props.clicked ? "pointer" : "default")};
 		transition: all 0.3s ease;
 	}
 
