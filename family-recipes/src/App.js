@@ -1,11 +1,7 @@
-import './App.css';
+import LoginPage from "./Pages/Login_Register/LoginPage";
 
 function App() {
-  return (
-    <div className="App">
-      <h1>Default</h1>
-    </div>
-  );
+	return <LoginPage />;
 }
 
 export default App;
