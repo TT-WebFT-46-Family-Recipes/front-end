@@ -7,6 +7,7 @@ const StyledHeader = styled.header`
 	display: flex;
 	justify-content: space-between;
 	border-bottom: solid 2px rgba(0, 0, 0, 0.1);
+	background-color: white;
 	opacity: 0.95;
 
 	.logo {
@@ -15,7 +16,7 @@ const StyledHeader = styled.header`
 		padding: 0.5% 0;
 	}
 
-	img {
+	.logo-img {
 		width: 100%;
 	}
 
@@ -46,7 +47,11 @@ const Header = ({ signedIn, signOut }) => {
 	return (
 		<StyledHeader>
 			<Link className="logo" to="/">
-				<img src={img} alt="secret family recipes logo"></img>
+				<img
+					className="logo-img"
+					src={img}
+					alt="secret family recipes logo"
+				></img>
 			</Link>
 			<div>
 				<NavLink className="a" to="/">
