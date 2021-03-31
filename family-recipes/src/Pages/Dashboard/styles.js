@@ -15,21 +15,37 @@ const StyledFilters = styled.div`
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-		height: 80%;
+		height: 85%;
 		width: 90%;
-		margin: 3% 0 35%;
+		margin-bottom: 29%;
 		background: white;
 		border-radius: 20px;
 		overflow: scroll;
+		opacity: 0.95;
 	}
 
 	.filters::-webkit-scrollbar {
 		display: none;
 	}
 
+	.new-recipe-btn {
+		margin: 12% 0;
+		color: rgb(38, 50, 56);
+		font-size: 1rem;
+		font-weight: bold;
+		letter-spacing: 1px;
+		background: rgba(136, 126, 126, 0.04);
+		padding: 2% 10%;
+		border: solid 2px rgba(0, 0, 0, 0.2);
+		border-radius: 10px;
+		font-family: "Ubuntu", sans-serif;
+		outline: none;
+		cursor: pointer;
+	}
+
 	input {
 		width: 75%;
-		margin: 20% 0;
+		margin: 0 0 5%;
 		color: rgb(38, 50, 56);
 		font-weight: 600;
 		font-size: 1rem;
@@ -97,7 +113,7 @@ const StyledRecipeContainer = styled.div`
 		bottom: 0;
 		left: 30%;
 		border: solid 2px rgba(0, 0, 0, 0.1);
-		border-radius: 10%;
+		border-radius: 15%;
 		overflow: scroll;
 	}
 
@@ -113,9 +129,9 @@ const StyledRecipeContainer = styled.div`
 		z-index: 1;
 		width: 25%;
 		height: 40%;
-		margin: 3% 3.9%;
+		margin: 2.9% 3.9% 3%;
 		background-color: white;
-		border-radius: 10%;
+		border-radius: 15%;
 		border: solid 2px rgba(0, 0, 0, 0.1);
 		opacity: 0.95;
 	}
