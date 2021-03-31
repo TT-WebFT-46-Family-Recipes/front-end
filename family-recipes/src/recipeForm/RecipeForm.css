@@ -1,0 +1,102 @@
+body{
+    background-image: linear-gradient( transparent, transparent ),
+    url('/src/recipeForm/images/pexels-pixabay-256318.jpg');
+        background-size:cover;
+        background-position:center;
+        background-repeat: no-repeat;
+        color: #5a5a5a;
+}
+.formContainer{
+    width:570px;
+    height:560px;
+    background:#e6e6e6;
+    border-radius:8px;
+    box-shadow:0 0 40px -10px #000;
+    margin:calc(50vh - 220px) auto;
+    padding:20px 30px;max-width:calc(100vw - 40px);
+    box-sizing:border-box;
+    font-family:'Montserrat',sans-serif;
+    position:relative;
+    left: 200px;
+   
+    
+}
+.form-group-submit{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+.topInputs{
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    flex-direction: row;
+}
+.recipeContainer{
+    height: 500px;
+    width: 500px;
+    border-radius:10px;
+}
+.ingredients{
+   padding:10px; 
+   border-radius:8px;
+}
+.instructions{
+   padding:10px; 
+   border-radius:8px;
+}
+.category{
+   padding:10px; 
+}
+.errors{
+    color: red;
+}
+input{
+    width:100%;
+    padding:10px;
+    box-sizing:border-box;
+    background:none;
+    outline:none;
+    resize:none;
+    border:0;
+    font-family:'Montserrat',sans-serif;
+    transition:all .3s;
+    border-bottom:2px solid #bebed2
+}
+input:focus{
+    border-bottom:2px solid #78788c
+}
+p:before{
+    content:attr(type);
+    display:block;
+    margin:28px 0 0;
+    font-size:14px;
+    color:#5a5a5a
+}
+button{background:#78788c;color:#fff}
+
+button {
+    color: #fff;
+    font-family: sans-serif;
+    font-weight: bold;
+    text-align: center;
+    text-decoration: none;
+    text-transform: uppercase;
+    line-height: 50px;
+    
+    position: relative;
+    display: block;
+    height: 50px;
+    width: 200px;
+    margin: 5% auto;
+    border: 1px solid #fff; 
+  }
+  button span, button i {
+    display: inline-block;
+    z-index: 100;
+  }
+  
+  button i {
+    font-style: normal;
+  }
