@@ -8,7 +8,7 @@ body{
 }
 .formContainer{
     width:570px;
-    height:560px;
+    height:630px;
     background:#e6e6e6;
     border-radius:8px;
     box-shadow:0 0 40px -10px #000;
@@ -34,7 +34,7 @@ body{
     flex-direction: row;
 }
 .recipeContainer{
-    height: 500px;
+    height: 570px;
     width: 500px;
     border-radius:10px;
 }
@@ -51,6 +51,7 @@ body{
 }
 .errors{
     color: red;
+    font-size: 12px;
 }
 input{
     width:100%;
