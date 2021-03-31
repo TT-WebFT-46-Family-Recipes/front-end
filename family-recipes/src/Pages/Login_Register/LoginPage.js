@@ -3,6 +3,7 @@ import Header from "../Header";
 import { LoginForm } from "./LoginForm";
 import styled from "styled-components";
 import img from "../../Assets/loginbackground.jpg";
+import { useHistory } from "react-router";
 
 const StyledLoginPage = styled.section`
 	background-image: url(${img});
@@ -14,7 +15,7 @@ const StyledLoginPage = styled.section`
 	width: 100%;
 `;
 
-const LoginPage = () => {
+const LoginPage = ({ signedIn, signOut }) => {
 	const [loginFormVals, setLoginFormVals] = useState({
 		username: "",
 		password: "",
@@ -25,7 +26,8 @@ const LoginPage = () => {
 	});
 	const [userLoggedIn, setUserLoggedIn] = useState({});
 	const [newUser, setNewUser] = useState({});
-	const [signedIn, setSignedIn] = useState(false);
+
+	const history = useHistory();
 
 	const updateLoginForm = (name, value) => {
 		setLoginFormVals({ ...loginFormVals, [name]: value });
@@ -38,20 +40,22 @@ const LoginPage = () => {
 	const logIn = (evt) => {
 		evt.preventDefault();
 		setUserLoggedIn({ ...loginFormVals });
-		setSignedIn(!signedIn);
+		signOut(!signedIn);
 		setLoginFormVals({ username: "", password: "" });
+		history.push("/dashboard");
 	};
 
 	const register = (evt) => {
 		evt.preventDefault();
 		setNewUser({ ...registerFormVals });
-		setSignedIn(!signedIn);
+		signOut(!signedIn);
 		setRegisterFormVals({ newUserUn: "", newUserPass: "" });
+		history.push("/dashboard");
 	};
 
 	return (
 		<>
-			<Header signedIn={signedIn} signOut={setSignedIn} />
+			<Header signedIn={signedIn} signOut={signOut} />
 			<StyledLoginPage>
 				<LoginForm
 					loginFormChange={updateLoginForm}
