@@ -13,7 +13,7 @@ import {
 const InitialState = {
   users: {},
   recipes: {},
-  isLoading: true,
+  isLoading: false,
   error: '',
 }
 
