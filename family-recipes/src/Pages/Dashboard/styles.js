@@ -15,16 +15,37 @@ const StyledFilters = styled.div`
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-		height: 80%;
+		height: 85%;
 		width: 90%;
-		margin: 0 0 35%;
+		margin-bottom: 29%;
 		background: white;
 		border-radius: 20px;
+		overflow: scroll;
+		opacity: 0.95;
+	}
+
+	.filters::-webkit-scrollbar {
+		display: none;
+	}
+
+	.new-recipe-btn {
+		margin: 12% 0;
+		color: rgb(38, 50, 56);
+		font-size: 1rem;
+		font-weight: bold;
+		letter-spacing: 1px;
+		background: rgba(136, 126, 126, 0.04);
+		padding: 2% 10%;
+		border: solid 2px rgba(0, 0, 0, 0.2);
+		border-radius: 10px;
+		font-family: "Ubuntu", sans-serif;
+		outline: none;
+		cursor: pointer;
 	}
 
 	input {
 		width: 75%;
-		margin: 20% 0;
+		margin: 0 0 5%;
 		color: rgb(38, 50, 56);
 		font-weight: 600;
 		font-size: 1rem;
@@ -48,17 +69,25 @@ const StyledFilters = styled.div`
 
 const StyledRecipeContainer = styled.div`
 	width: 80%;
+	height: 100%;
 	position: fixed;
 	left: 20%;
 	border-left: solid 2px rgba(0, 0, 0, 0.1);
 
 	.bg-img {
-		position: relative;
-		height: 100vh;
+		height: 89vh;
 		width: 100%;
 		display: flex;
+		flex-wrap: wrap;
 		align-items: center;
-		justify-content: center;
+		justify-content: flex-start;
+		overflow: scroll;
+		scroll-behavior: smooth;
+		background-attachment: fixed;
+	}
+
+	.bg-img::-webkit-scrollbar {
+		display: none;
 	}
 
 	.bg-img::before {
@@ -71,6 +100,40 @@ const StyledRecipeContainer = styled.div`
 		right: 0px;
 		bottom: 0px;
 		left: 0px;
+	}
+
+	.recipe-modal {
+		z-index: 1;
+		width: 40%;
+		height: 60%;
+		background-color: #ffffff;
+		position: absolute;
+		top: 14%;
+		right: 0;
+		bottom: 0;
+		left: 30%;
+		border: solid 2px rgba(0, 0, 0, 0.1);
+		border-radius: 15%;
+		overflow: scroll;
+	}
+
+	.hidden {
+		display: none;
+	}
+
+	.recipe-modal::-webkit-scrollbar {
+		display: none;
+	}
+
+	.recipe {
+		z-index: 1;
+		width: 25%;
+		height: 40%;
+		margin: 2.9% 3.9% 3%;
+		background-color: white;
+		border-radius: 15%;
+		border: solid 2px rgba(0, 0, 0, 0.1);
+		opacity: 0.95;
 	}
 `;
 
