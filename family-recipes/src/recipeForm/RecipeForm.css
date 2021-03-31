@@ -6,21 +6,21 @@
 	background-repeat: no-repeat;
 	color: #5a5a5a;
 	height: 100vh;
-	margin: 0 0;
 }
 .nestedContainer {
-	width: 570px;
-	height: 630px;
+	width: auto;
+	height: auto;
 	background: #e6e6e6;
 	border-radius: 8px;
 	box-shadow: 0 0 40px -10px #000;
-	margin: calc(50vh - 220px) auto;
+	margin: 0 auto;
 	padding: 20px 30px;
 	max-width: calc(100vw - 40px);
 	box-sizing: border-box;
 	font-family: "Montserrat", sans-serif;
-	position: relative;
-	left: 200px;
+	position: absolute;
+	top: 5%;
+	left: 45%;
 }
 .form-group-submit {
 	display: flex;
@@ -54,7 +54,7 @@
 	color: red;
 	font-size: 12px;
 }
-input {
+.formInput {
 	width: 100%;
 	padding: 10px;
 	box-sizing: border-box;
@@ -66,10 +66,10 @@ input {
 	transition: all 0.3s;
 	border-bottom: 2px solid #bebed2;
 }
-input:focus {
+.formInput:focus {
 	border-bottom: 2px solid #78788c;
 }
-p:before {
+.pRecipe:before {
 	content: attr(type);
 	display: block;
 	margin: 28px 0 0;
@@ -95,5 +95,5 @@ p:before {
 	height: 50px;
 	width: 200px;
 	margin: 5% auto;
-	border: 1px solid #fff;
+	border: 1px solid #ffffff;
 }
