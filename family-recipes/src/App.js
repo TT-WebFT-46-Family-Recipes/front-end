@@ -11,16 +11,17 @@ function App() {
   const [signedIn, setSignedIn] = useState(false)
 
   return (
-    <Router>
-      <Switch>
-        <Route path="/dashboard">
-          <Dashboard signedIn={signedIn} signOut={setSignedIn} />
-        </Route>
-        <Route path="/">
-          <LoginPage signedIn={signedIn} signOut={setSignedIn} />
-        </Route>
-      </Switch>
-    </Router>
+    // <Router>
+    //   <Switch>
+    //     <Route path="/dashboard">
+    //       <Dashboard signedIn={signedIn} signOut={setSignedIn} />
+    //     </Route>
+    //     <Route path="/">
+    //       <LoginPage signedIn={signedIn} signOut={setSignedIn} />
+    //     </Route>
+    //   </Switch>
+    // </Router>
+    <RecipeEntry/>
   )
 }
 

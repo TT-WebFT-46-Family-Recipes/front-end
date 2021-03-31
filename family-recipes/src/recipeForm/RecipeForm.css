@@ -1,12 +1,14 @@
-body {
+.formContainer {
 	background-image: linear-gradient(transparent, transparent),
 		url("/src/recipeForm/images/pexels-pixabay-256318.jpg");
 	background-size: cover;
 	background-position: center;
 	background-repeat: no-repeat;
 	color: #5a5a5a;
+	height: 100vh;
+	margin: 0 0;
 }
-.formContainer {
+.nestedContainer {
 	width: 570px;
 	height: 630px;
 	background: #e6e6e6;
@@ -74,12 +76,12 @@ p:before {
 	font-size: 14px;
 	color: #5a5a5a;
 }
-button {
+.recipeButton {
 	background: #78788c;
 	color: #fff;
 }
 
-button {
+.recipeButton {
 	color: #fff;
 	font-family: sans-serif;
 	font-weight: bold;
@@ -94,13 +96,4 @@ button {
 	width: 200px;
 	margin: 5% auto;
 	border: 1px solid #fff;
-}
-button span,
-button i {
-	display: inline-block;
-	z-index: 100;
-}
-
-button i {
-	font-style: normal;
 }
