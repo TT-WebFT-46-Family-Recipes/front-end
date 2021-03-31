@@ -17,9 +17,7 @@ body{
     box-sizing:border-box;
     font-family:'Montserrat',sans-serif;
     position:relative;
-    left: 200px;
-   
-    
+    left: 200px; 
 }
 .form-group-submit{
     display: flex;
