@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Header from "../Header";
 import styled from "styled-components";
 import { StyledFilters, StyledRecipeContainer } from "./styles";
+import { useSelector } from 'react-redux'
 
 const StyledDashboard = styled.section`
 	height: 100vh;
@@ -9,7 +10,10 @@ const StyledDashboard = styled.section`
 	position: fixed;
 `;
 
+
 const Dashboard = ({ signedIn, signOut }) => {
+	const { isLoading } = useSelector(state => state)
+
 	const [clicked, setClicked] = useState(false);
 
 	const click = () => {
@@ -26,7 +30,7 @@ const Dashboard = ({ signedIn, signOut }) => {
 						<input name="search" placeholder="search:"></input>
 					</div>
 				</StyledFilters>
-				<StyledRecipeContainer>
+				{isLoading ? <h1>Here</h1> : <StyledRecipeContainer>
 					<div className="bg-img">
 						<div className="recipe">
 							<h3
@@ -125,7 +129,8 @@ const Dashboard = ({ signedIn, signOut }) => {
 							clicked ? "recipe-modal" : "recipe-modal hidden"
 						}
 					></div>
-				</StyledRecipeContainer>
+				</StyledRecipeContainer>}
+				
 			</StyledDashboard>
 		</>
 	);

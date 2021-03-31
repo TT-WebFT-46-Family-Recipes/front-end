@@ -11,9 +11,9 @@ import {
 } from '../actions'
 
 const InitialState = {
-    users: [],
-    recipes: [],
-    isLoading: false,
+    users: {},
+    recipes: {},
+    isLoading: true,
     error: ''
 }
 
