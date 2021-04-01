@@ -38,7 +38,7 @@ export const LoginForm = ({
 						placeholder={
 							invalidAttempt === 0
 								? "Username"
-								: "At least 6 characters"
+								: "At least 6 characters!"
 						}
 						name="username"
 						value={loginVals.username}
@@ -50,7 +50,7 @@ export const LoginForm = ({
 						placeholder={
 							invalidAttempt === 0
 								? "Password"
-								: "At least 8 characters"
+								: "At least 8 characters!"
 						}
 						name="password"
 						value={loginVals.password}
@@ -76,7 +76,7 @@ export const LoginForm = ({
 						placeholder={
 							invalidAttempt === 0
 								? "Username"
-								: "At least 6 characters"
+								: "At least 6 characters!"
 						}
 						name="newUserUn"
 						value={registerVals.username}
@@ -88,7 +88,7 @@ export const LoginForm = ({
 						placeholder={
 							invalidAttempt === 0
 								? "Password"
-								: "At least 8 characters"
+								: "At least 8 characters!"
 						}
 						name="newUserPass"
 						value={registerVals.password}

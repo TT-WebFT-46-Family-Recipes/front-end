@@ -43,12 +43,12 @@ const LoginPage = ({ signedIn, signIn }) => {
   const [invalidAttempt, setInvalidAttempt] = useState(0)
   const [registerFormOpen, setRegisterFormOpen] = useState(false)
 
-  const { push } = useHistory()
 
-  // used to set css classes and do things like: hide/show drawer which contains register form
-  const showRegisterForm = () => {
-    setRegisterFormOpen((registerFormOpen) => !registerFormOpen)
-  }
+	const { push } = useHistory();
+
+	const showRegisterForm = () => {
+		setRegisterFormOpen((registerFormOpen) => !registerFormOpen);
+	};
 
   useEffect(() => {
     if (registerFormOpen) {
