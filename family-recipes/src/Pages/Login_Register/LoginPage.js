@@ -3,11 +3,10 @@ import Header from '../Header'
 import { LoginForm } from './LoginForm'
 import styled from 'styled-components'
 import img from '../../Assets/loginbackground.jpg'
-import { useHistory } from 'react-router'
 import * as yup from 'yup'
 import schema from './formSchema'
 import axios from 'axios'
-import { axiosWithAuth } from '../../helper/AxiosWithAuth'
+import { useHistory } from 'react-router'
 
 const StyledLoginPage = styled.section`
   background-image: url(${img});
@@ -20,6 +19,8 @@ const StyledLoginPage = styled.section`
 `
 
 const LoginPage = ({ signedIn, signIn }) => {
+  const { push } = useHistory()
+
   const [loginFormVals, setLoginFormVals] = useState({
     username: '',
     password: '',
@@ -36,29 +37,24 @@ const LoginPage = ({ signedIn, signIn }) => {
     username: 'username must be 6 characters long',
     password: 'password must be 8 characters long',
   })
-  const [userLoggedIn, setUserLoggedIn] = useState({})
-  const [newUser, setNewUser] = useState({})
   const [loginValidated, setLoginValidated] = useState(false)
   const [registerValidated, setRegisterValidated] = useState(false)
-  const [invalidAttempt, setInvalidAttempt] = useState(0)
   const [registerFormOpen, setRegisterFormOpen] = useState(false)
 
-  const { push } = useHistory()
+  const [attemptMsg, setAttemptMsg] = useState({
+    success: true,
+    formValidationFailed: false,
+    incorrectCredentials: false,
+    userAlreadyExists: false,
+  })
 
+  /* used to determine if the register form drawer is open or closed */
   const showRegisterForm = () => {
     setRegisterFormOpen((registerFormOpen) => !registerFormOpen)
   }
 
-  useEffect(() => {
-    if (registerFormOpen) {
-      setLoginFormVals({ username: '', password: '' })
-      setInvalidAttempt(0)
-    } else {
-      setRegisterFormVals({ username: '', password: '' })
-      setInvalidAttempt(0)
-    }
-  }, [registerFormOpen])
-
+  /* based on the values of name/value it will update the corresponding 
+    object in state (loginForm or registerForm) */
   const updateForm = (name, value) => {
     switch (name) {
       case 'username':
@@ -87,6 +83,29 @@ const LoginPage = ({ signedIn, signIn }) => {
     }
   }
 
+  /* resets the username and password fields as well as the attempt 
+    message object in state when the drawer opens and closes */
+  useEffect(() => {
+    if (registerFormOpen) {
+      setLoginFormVals({ username: '', password: '' })
+      setAttemptMsg({
+        success: true,
+        formValidationFailed: false,
+        incorrectCredentials: false,
+        userAlreadyExists: false,
+      })
+    } else {
+      setRegisterFormVals({ username: '', password: '' })
+      setAttemptMsg({
+        success: true,
+        formValidationFailed: false,
+        incorrectCredentials: false,
+        userAlreadyExists: false,
+      })
+    }
+  }, [registerFormOpen])
+
+  /* performs form validation for login form using yup */
   useEffect(() => {
     for (const key of Object.keys(loginFormVals))
       yup
@@ -112,6 +131,7 @@ const LoginPage = ({ signedIn, signIn }) => {
         })
   }, [loginFormVals])
 
+  /* performs form validation for register form using yup */
   useEffect(() => {
     for (const key of Object.keys(registerFormVals))
       yup
@@ -137,50 +157,74 @@ const LoginPage = ({ signedIn, signIn }) => {
         })
   }, [registerFormVals])
 
+  /* changes login and register validation state based on if yup 
+    finds any errors with the forms (min/required values met) */
   useEffect(() => {
     if (loginFormErrors.username === '' && loginFormErrors.password === '')
-      setLoginValidated((loginValidated) => !loginValidated)
+      setLoginValidated(true)
+    else if (loginFormErrors.username !== '' || loginFormErrors.password !== '')
+      setLoginValidated(false)
     if (
       registerFormErrors.username === '' &&
       registerFormErrors.password === ''
     )
-      setRegisterValidated((registerValidated) => !registerValidated)
-  }, [loginFormErrors, registerFormErrors, registerFormOpen])
+      setRegisterValidated(true)
+    else if (
+      registerFormErrors.username !== '' ||
+      registerFormErrors.password !== ''
+    )
+      setRegisterValidated(false)
+  }, [loginFormErrors, registerFormErrors, registerFormOpen, attemptMsg])
 
+  /* resets the login and register validation state when the 
+    drawer opens and closes  */
+  useEffect(() => {
+    if (registerFormOpen) {
+      setLoginValidated(false)
+    } else setRegisterValidated(false)
+  }, [registerFormOpen])
+
+  /* performs the login authentication and sets corresponding errors 
+    according to the attempt message object in state (if any) */
   const logIn = (evt) => {
     evt.preventDefault()
     if (loginValidated) {
-      setUserLoggedIn({ ...loginFormVals })
-      signIn((signedIn) => !signedIn)
-      setLoginFormVals({ username: '', password: '' })
-
       axios
         .post(
           'https://tt-webft-46-family-recipes.herokuapp.com/api/auth/login',
           loginFormVals
         )
         .then((res) => {
-          console.log(res)
           localStorage.setItem('token', JSON.stringify(res.data))
+          setLoginFormVals({ username: '', password: '' })
+          signIn((signedIn) => !signedIn)
           push('/dashboard')
         })
         .catch((err) => {
-          console.log(err.message)
-          push('/login')
+          setLoginFormVals({ username: '', password: '' })
+          setAttemptMsg({
+            ...attemptMsg,
+            incorrectCredentials: true,
+            formValidationFailed: false,
+            success: false,
+          })
         })
     } else {
-      setInvalidAttempt((invalidAttempt) => (invalidAttempt += 1))
+      setAttemptMsg({
+        ...attemptMsg,
+        incorrectCredentials: false,
+        formValidationFailed: true,
+        success: false,
+      })
       setLoginFormVals({ username: '', password: '' })
     }
   }
 
+  /* performs the register authentication and sets corresponding errors 
+    according to the attempt message object in state (if any) */
   const register = (evt) => {
     evt.preventDefault()
     if (registerValidated) {
-      setNewUser({ ...registerFormVals })
-      signIn((signedIn) => !signedIn)
-      setRegisterFormVals({ username: '', password: '' })
-
       axios
         .post(
           'https://tt-webft-46-family-recipes.herokuapp.com/api/auth/register',
@@ -188,13 +232,26 @@ const LoginPage = ({ signedIn, signIn }) => {
         )
         .then((res) => {
           localStorage.setItem('token', JSON.stringify(res.data))
+          setRegisterFormVals({ username: '', password: '' })
+          signIn((signedIn) => !signedIn)
           push('/dashboard')
         })
         .catch((err) => {
-          console.log(err.message)
+          setRegisterFormVals({ username: '', password: '' })
+          setAttemptMsg({
+            ...attemptMsg,
+            userAlreadyExists: true,
+            formValidationFailed: false,
+            success: false,
+          })
         })
     } else {
-      setInvalidAttempt((invalidAttempt) => (invalidAttempt += 1))
+      setAttemptMsg({
+        ...attemptMsg,
+        userAlreadyExists: false,
+        formValidationFailed: true,
+        success: false,
+      })
       setRegisterFormVals({ username: '', password: '' })
     }
   }
@@ -211,7 +268,7 @@ const LoginPage = ({ signedIn, signIn }) => {
           register={register}
           registerFormOpen={registerFormOpen}
           showRegisterForm={showRegisterForm}
-          invalidAttempt={invalidAttempt}
+          attemptMsg={attemptMsg}
         />
       </StyledLoginPage>
     </>

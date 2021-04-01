@@ -127,8 +127,8 @@ const StyledRecipeContainer = styled.div`
 	.recipe {
 		width: 25%;
 		z-index: 1;
-		margin: 2.9% 3.9% 3%;
-		height: 50%;
+		margin: 2.9% 3.9% 2.9%;
+		height: 40%;
 		border-radius: 12%;
 		background-color: white;
 		opacity: 0.96;

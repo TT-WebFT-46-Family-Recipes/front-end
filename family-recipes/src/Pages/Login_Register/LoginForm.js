@@ -9,11 +9,34 @@ export const LoginForm = ({
 	register,
 	registerFormOpen,
 	showRegisterForm,
-	invalidAttempt,
+	attemptMsg,
 }) => {
 	const updateVals = (evt) => {
 		update(evt.target.name, evt.target.value);
 	};
+
+	const {
+		formValidationFailed,
+		incorrectCredentials,
+		userAlreadyExists,
+	} = attemptMsg;
+
+	let userNamePlaceholder = "";
+	let passwordPlaceholder = "";
+
+	if (formValidationFailed) {
+		userNamePlaceholder = "At least 6 characters!";
+		passwordPlaceholder = "At least 8 characters!";
+	} else if (incorrectCredentials) {
+		userNamePlaceholder = "One of these is wrong!";
+		passwordPlaceholder = "Try again?";
+	} else if (userAlreadyExists) {
+		userNamePlaceholder = "Username already exists!";
+		passwordPlaceholder = "Try again?";
+	} else {
+		userNamePlaceholder = "Username";
+		passwordPlaceholder = "Password";
+	}
 
 	return (
 		<StyledForm registerFormOpen={registerFormOpen}>
@@ -35,11 +58,7 @@ export const LoginForm = ({
 					<input
 						className="inputs"
 						type="text"
-						placeholder={
-							invalidAttempt === 0
-								? "Username"
-								: "At least 6 characters!"
-						}
+						placeholder={userNamePlaceholder}
 						name="username"
 						value={loginVals.username}
 						onChange={updateVals}
@@ -47,11 +66,7 @@ export const LoginForm = ({
 					<input
 						className="inputs"
 						type="password"
-						placeholder={
-							invalidAttempt === 0
-								? "Password"
-								: "At least 8 characters!"
-						}
+						placeholder={passwordPlaceholder}
 						name="password"
 						value={loginVals.password}
 						onChange={updateVals}
@@ -73,11 +88,7 @@ export const LoginForm = ({
 					<input
 						className="inputsRegister"
 						type="text"
-						placeholder={
-							invalidAttempt === 0
-								? "Username"
-								: "At least 6 characters!"
-						}
+						placeholder={userNamePlaceholder}
 						name="newUserUn"
 						value={registerVals.username}
 						onChange={updateVals}
@@ -85,11 +96,7 @@ export const LoginForm = ({
 					<input
 						className="inputsRegister"
 						type="text"
-						placeholder={
-							invalidAttempt === 0
-								? "Password"
-								: "At least 8 characters!"
-						}
+						placeholder={passwordPlaceholder}
 						name="newUserPass"
 						value={registerVals.password}
 						onChange={updateVals}
