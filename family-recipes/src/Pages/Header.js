@@ -2,7 +2,6 @@ import React from "react";
 import { NavLink, Link } from "react-router-dom";
 import styled from "styled-components";
 import img from "../Assets/logo.png";
-import { axiosWithAuth } from "../helper/AxiosWithAuth";
 
 const StyledHeader = styled.header`
 	display: flex;
