@@ -48,10 +48,13 @@ const LoginPage = ({ signedIn, signIn }) => {
 		userAlreadyExists: false,
 	});
 
+	/* used to determine if the register form drawer is open or closed */
 	const showRegisterForm = () => {
 		setRegisterFormOpen((registerFormOpen) => !registerFormOpen);
 	};
 
+	/* based on the values of name/value it will update the corresponding 
+    object in state (loginForm or registerForm) */
 	const updateForm = (name, value) => {
 		switch (name) {
 			case "username":
@@ -80,6 +83,8 @@ const LoginPage = ({ signedIn, signIn }) => {
 		}
 	};
 
+	/* resets the username and password fields as well as the attempt 
+    message object in state when the drawer opens and closes */
 	useEffect(() => {
 		if (registerFormOpen) {
 			setLoginFormVals({ username: "", password: "" });
@@ -100,6 +105,7 @@ const LoginPage = ({ signedIn, signIn }) => {
 		}
 	}, [registerFormOpen]);
 
+	/* performs form validation for login form using yup */
 	useEffect(() => {
 		for (const key of Object.keys(loginFormVals))
 			yup.reach(schema, key)
@@ -124,6 +130,7 @@ const LoginPage = ({ signedIn, signIn }) => {
 				});
 	}, [loginFormVals]);
 
+	/* performs form validation for register form using yup */
 	useEffect(() => {
 		for (const key of Object.keys(registerFormVals))
 			yup.reach(schema, key)
@@ -148,6 +155,8 @@ const LoginPage = ({ signedIn, signIn }) => {
 				});
 	}, [registerFormVals]);
 
+	/* changes login and register validation state based on if yup 
+    finds any errors with the forms (min/required values met) */
 	useEffect(() => {
 		if (loginFormErrors.username === "" && loginFormErrors.password === "")
 			setLoginValidated(true);
@@ -168,12 +177,16 @@ const LoginPage = ({ signedIn, signIn }) => {
 			setRegisterValidated(false);
 	}, [loginFormErrors, registerFormErrors, registerFormOpen, attemptMsg]);
 
+	/* resets the login and register validation state when the 
+    drawer opens and closes  */
 	useEffect(() => {
 		if (registerFormOpen) {
 			setLoginValidated(false);
 		} else setRegisterValidated(false);
 	}, [registerFormOpen]);
 
+	/* performs the login authentication and sets corresponding errors 
+    according to the attempt message object in state (if any) */
 	const logIn = (evt) => {
 		evt.preventDefault();
 		if (loginValidated) {
@@ -200,6 +213,7 @@ const LoginPage = ({ signedIn, signIn }) => {
 		} else {
 			setAttemptMsg({
 				...attemptMsg,
+				incorrectCredentials: false,
 				formValidationFailed: true,
 				success: false,
 			});
@@ -207,6 +221,8 @@ const LoginPage = ({ signedIn, signIn }) => {
 		}
 	};
 
+	/* performs the register authentication and sets corresponding errors 
+    according to the attempt message object in state (if any) */
 	const register = (evt) => {
 		evt.preventDefault();
 		if (registerValidated) {
@@ -233,6 +249,7 @@ const LoginPage = ({ signedIn, signIn }) => {
 		} else {
 			setAttemptMsg({
 				...attemptMsg,
+				userAlreadyExists: false,
 				formValidationFailed: true,
 				success: false,
 			});
