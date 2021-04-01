@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import Header from "../Header";
 import styled from "styled-components";
 import { StyledFilters, StyledRecipeContainer } from "./styles";
@@ -22,13 +22,12 @@ const loader = css`
 const Dashboard = ({ signedIn, signIn }) => {
 	const { isLoading } = useSelector((state) => state);
 
-	const [clicked, setClicked] = useState(false);
+	// const [clicked, setClicked] = useState(false);
+	// const click = () => {
+	// 	setClicked((clicked) => !clicked);
+	// };
 
 	const { push } = useHistory();
-
-	const click = () => {
-		setClicked((clicked) => !clicked);
-	};
 
 	return (
 		<>
@@ -71,7 +70,8 @@ const Dashboard = ({ signedIn, signIn }) => {
 						</div>
 						<div
 							className={
-								clicked ? "recipe-modal" : "recipe-modal hidden"
+								"recipe-modal hidden"
+								// clicked ? "recipe-modal" : "recipe-modal hidden"
 							}
 						></div>
 					</StyledRecipeContainer>

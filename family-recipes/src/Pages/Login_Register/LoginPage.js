@@ -167,6 +167,7 @@ const LoginPage = ({ signedIn, signIn }) => {
 					loginFormVals
 				)
 				.then((res) => {
+					console.log(res);
 					localStorage.setItem("token", JSON.stringify(res.data));
 					setLoginFormVals({ username: "", password: "" });
 					signIn((signedIn) => !signedIn);

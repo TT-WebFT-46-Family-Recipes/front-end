@@ -18,24 +18,33 @@ function App() {
 	return (
 		<Router>
 			<Switch>
-				<Route path="/newrecipe">
-					<RecipeEntry />
-				</Route>
-				<PrivateRoute path="/dashboard">
-					<Dashboard signedIn={signedIn} signIn={setSignedIn} />
-				</PrivateRoute>
+				{/* if signed in render dashboard else render login page */}
 				<Route path="/login">
 					{signedIn ? (
-						<Dashboard signedIn={signedIn} signIn={setSignedIn} />
+						<PrivateRoute path="/dashboard">
+							<Dashboard
+								signedIn={signedIn}
+								signIn={setSignedIn}
+							/>
+						</PrivateRoute>
 					) : (
 						<LoginPage signedIn={signedIn} signIn={setSignedIn} />
 					)}
 				</Route>
+
+				{/* dashboard */}
+				<PrivateRoute path="/dashboard">
+					<Dashboard signedIn={signedIn} signIn={setSignedIn} />
+				</PrivateRoute>
+
+				{/* new recipe */}
+				<Route path="/newrecipe">
+					<RecipeEntry />
+				</Route>
+
+				{/* marketing page */}
 				<Route path="/">
 					<Link to="/login">Test</Link>
-					{/* <a href="/login" onClick={testing}>
-						Click me
-					</a> */}
 				</Route>
 			</Switch>
 		</Router>
