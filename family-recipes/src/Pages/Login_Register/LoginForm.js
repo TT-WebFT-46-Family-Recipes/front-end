@@ -17,8 +17,7 @@ export const LoginForm = ({
 
 	const {
 		formValidationFailed,
-		userNotFound,
-		incorrectPassword,
+		incorrectCredentials,
 		userAlreadyExists,
 	} = attemptMsg;
 
@@ -28,12 +27,9 @@ export const LoginForm = ({
 	if (formValidationFailed) {
 		userNamePlaceholder = "At least 6 characters!";
 		passwordPlaceholder = "At least 8 characters!";
-	} else if (userNotFound) {
-		userNamePlaceholder = "Username not found!!";
+	} else if (incorrectCredentials) {
+		userNamePlaceholder = "One of these is wrong!";
 		passwordPlaceholder = "Try again?";
-	} else if (incorrectPassword) {
-		userNamePlaceholder = "Try again?!";
-		passwordPlaceholder = "Incorrect Password!";
 	} else if (userAlreadyExists) {
 		userNamePlaceholder = "Username already exists!";
 		passwordPlaceholder = "Try again?";

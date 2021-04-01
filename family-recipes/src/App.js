@@ -7,11 +7,6 @@ import Dashboard from "./Pages/Dashboard/Dashboard";
 import LoginPage from "./Pages/Login_Register/LoginPage";
 import RecipeEntry from "./Pages/recipeForm/RecipeEntry";
 
-// const testing = (evt) => {
-// 	evt.preventDefault();
-// 	window.location.pathname = "login";
-// };
-
 function App() {
 	const [signedIn, setSignedIn] = useState(false);
 

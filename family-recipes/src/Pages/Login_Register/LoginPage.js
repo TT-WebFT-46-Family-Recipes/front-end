@@ -6,6 +6,7 @@ import img from "../../Assets/loginbackground.jpg";
 import * as yup from "yup";
 import schema from "./formSchema";
 import axios from "axios";
+import { useHistory } from "react-router";
 
 const StyledLoginPage = styled.section`
 	background-image: url(${img});
@@ -18,6 +19,8 @@ const StyledLoginPage = styled.section`
 `;
 
 const LoginPage = ({ signedIn, signIn }) => {
+	const { push } = useHistory();
+
 	const [loginFormVals, setLoginFormVals] = useState({
 		username: "",
 		password: "",
@@ -39,38 +42,15 @@ const LoginPage = ({ signedIn, signIn }) => {
 	const [registerFormOpen, setRegisterFormOpen] = useState(false);
 
 	const [attemptMsg, setAttemptMsg] = useState({
-		success: false,
+		success: true,
 		formValidationFailed: false,
-		userNotFound: false,
-		incorrectPassword: false,
+		incorrectCredentials: false,
 		userAlreadyExists: false,
 	});
 
 	const showRegisterForm = () => {
 		setRegisterFormOpen((registerFormOpen) => !registerFormOpen);
 	};
-
-	useEffect(() => {
-		if (registerFormOpen) {
-			setLoginFormVals({ username: "", password: "" });
-			setAttemptMsg({
-				success: false,
-				formValidationFailed: false,
-				userNotFound: false,
-				incorrectPassword: false,
-				userAlreadyExists: false,
-			});
-		} else {
-			setRegisterFormVals({ username: "", password: "" });
-			setAttemptMsg({
-				success: false,
-				formValidationFailed: false,
-				userNotFound: false,
-				incorrectPassword: false,
-				userAlreadyExists: false,
-			});
-		}
-	}, [registerFormOpen]);
 
 	const updateForm = (name, value) => {
 		switch (name) {
@@ -99,6 +79,26 @@ const LoginPage = ({ signedIn, signIn }) => {
 				break;
 		}
 	};
+
+	useEffect(() => {
+		if (registerFormOpen) {
+			setLoginFormVals({ username: "", password: "" });
+			setAttemptMsg({
+				success: true,
+				formValidationFailed: false,
+				incorrectCredentials: false,
+				userAlreadyExists: false,
+			});
+		} else {
+			setRegisterFormVals({ username: "", password: "" });
+			setAttemptMsg({
+				success: true,
+				formValidationFailed: false,
+				incorrectCredentials: false,
+				userAlreadyExists: false,
+			});
+		}
+	}, [registerFormOpen]);
 
 	useEffect(() => {
 		for (const key of Object.keys(loginFormVals))
@@ -150,13 +150,29 @@ const LoginPage = ({ signedIn, signIn }) => {
 
 	useEffect(() => {
 		if (loginFormErrors.username === "" && loginFormErrors.password === "")
-			setLoginValidated((loginValidated) => !loginValidated);
+			setLoginValidated(true);
+		else if (
+			loginFormErrors.username !== "" ||
+			loginFormErrors.password !== ""
+		)
+			setLoginValidated(false);
 		if (
 			registerFormErrors.username === "" &&
 			registerFormErrors.password === ""
 		)
-			setRegisterValidated((registerValidated) => !registerValidated);
-	}, [loginFormErrors, registerFormErrors, registerFormOpen]);
+			setRegisterValidated(true);
+		else if (
+			registerFormErrors.username !== "" ||
+			registerFormErrors.password !== ""
+		)
+			setRegisterValidated(false);
+	}, [loginFormErrors, registerFormErrors, registerFormOpen, attemptMsg]);
+
+	useEffect(() => {
+		if (registerFormOpen) {
+			setLoginValidated(false);
+		} else setRegisterValidated(false);
+	}, [registerFormOpen]);
 
 	const logIn = (evt) => {
 		evt.preventDefault();
@@ -167,18 +183,26 @@ const LoginPage = ({ signedIn, signIn }) => {
 					loginFormVals
 				)
 				.then((res) => {
-					console.log(res);
 					localStorage.setItem("token", JSON.stringify(res.data));
 					setLoginFormVals({ username: "", password: "" });
 					signIn((signedIn) => !signedIn);
+					push("/dashboard");
 				})
 				.catch((err) => {
-					console.log({ err });
 					setLoginFormVals({ username: "", password: "" });
-					// something that changes the placeholder for whatever the message error is
+					setAttemptMsg({
+						...attemptMsg,
+						incorrectCredentials: true,
+						formValidationFailed: false,
+						success: false,
+					});
 				});
 		} else {
-			setAttemptMsg({ ...attemptMsg, formValidationFailed: true });
+			setAttemptMsg({
+				...attemptMsg,
+				formValidationFailed: true,
+				success: false,
+			});
 			setLoginFormVals({ username: "", password: "" });
 		}
 	};
@@ -195,14 +219,23 @@ const LoginPage = ({ signedIn, signIn }) => {
 					localStorage.setItem("token", JSON.stringify(res.data));
 					setRegisterFormVals({ username: "", password: "" });
 					signIn((signedIn) => !signedIn);
+					push("/dashboard");
 				})
 				.catch((err) => {
-					console.log({ err });
 					setRegisterFormVals({ username: "", password: "" });
-					// something that changes the placeholder for whatever the message error is
+					setAttemptMsg({
+						...attemptMsg,
+						userAlreadyExists: true,
+						formValidationFailed: false,
+						success: false,
+					});
 				});
 		} else {
-			setAttemptMsg({ ...attemptMsg, formValidationFailed: true });
+			setAttemptMsg({
+				...attemptMsg,
+				formValidationFailed: true,
+				success: false,
+			});
 			setRegisterFormVals({ username: "", password: "" });
 		}
 	};
