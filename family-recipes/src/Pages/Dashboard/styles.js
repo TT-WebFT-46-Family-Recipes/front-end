@@ -94,7 +94,7 @@ const StyledRecipeContainer = styled.div`
 		content: "";
 		background-image: url(${img});
 		background-size: cover;
-		opacity: 0.75;
+		opacity: 0.8;
 		position: absolute;
 		top: 0px;
 		right: 0px;
@@ -124,16 +124,15 @@ const StyledRecipeContainer = styled.div`
 	.recipe-modal::-webkit-scrollbar {
 		display: none;
 	}
-
 	.recipe {
-		z-index: 1;
 		width: 25%;
-		height: 40%;
+		z-index: 1;
 		margin: 2.9% 3.9% 3%;
+		height: 50%;
+		border-radius: 12%;
 		background-color: white;
-		border-radius: 15%;
+		opacity: 0.96;
 		border: solid 2px rgba(0, 0, 0, 0.1);
-		opacity: 0.95;
 	}
 `;
 

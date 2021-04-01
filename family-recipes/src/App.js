@@ -5,7 +5,7 @@ import Dashboard from "./Pages/Dashboard/Dashboard";
 import { useState } from "react";
 
 import React from "react";
-import RecipeEntry from "./recipeForm/RecipeEntry";
+import RecipeEntry from "./Pages/recipeForm/RecipeEntry";
 
 function App() {
 	const [signedIn, setSignedIn] = useState(false);
@@ -15,6 +15,9 @@ function App() {
 			<Switch>
 				<Route path="/dashboard">
 					<Dashboard signedIn={signedIn} signIn={setSignedIn} />
+				</Route>
+				<Route path="/newrecipe">
+					<RecipeEntry />
 				</Route>
 				<Route path="/">
 					<LoginPage signedIn={signedIn} signIn={setSignedIn} />

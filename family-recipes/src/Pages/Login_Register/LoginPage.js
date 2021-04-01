@@ -41,7 +41,7 @@ const LoginPage = ({ signedIn, signIn }) => {
 	const [invalidAttempt, setInvalidAttempt] = useState(0);
 	const [registerFormOpen, setRegisterFormOpen] = useState(false);
 
-	const history = useHistory();
+	const { push } = useHistory();
 
 	const showRegisterForm = () => {
 		setRegisterFormOpen((registerFormOpen) => !registerFormOpen);
@@ -149,11 +149,11 @@ const LoginPage = ({ signedIn, signIn }) => {
 			setUserLoggedIn({ ...loginFormVals });
 			signIn((signedIn) => !signedIn);
 			setLoginFormVals({ username: "", password: "" });
+			push("/dashboard");
 		} else {
 			setInvalidAttempt((invalidAttempt) => (invalidAttempt += 1));
 			setLoginFormVals({ username: "", password: "" });
 		}
-		history.push("/dashboard");
 	};
 
 	const register = (evt) => {
@@ -162,11 +162,11 @@ const LoginPage = ({ signedIn, signIn }) => {
 			setNewUser({ ...registerFormVals });
 			signIn((signedIn) => !signedIn);
 			setRegisterFormVals({ username: "", password: "" });
+			push("/dashboard");
 		} else {
 			setInvalidAttempt((invalidAttempt) => (invalidAttempt += 1));
 			setRegisterFormVals({ username: "", password: "" });
 		}
-		history.push("/dashboard");
 	};
 
 	return (
