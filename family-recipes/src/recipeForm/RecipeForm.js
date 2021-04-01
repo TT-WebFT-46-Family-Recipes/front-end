@@ -1,7 +1,6 @@
 import React from 'react';
 import './RecipeForm.css'
 
-
 export default function RecipeForm(props) {
     const { values, submit, change, disabled, errors } = props;
   
@@ -20,7 +19,7 @@ export default function RecipeForm(props) {
     return (
       
       <form className="formContainer" onSubmit={onSubmit}>
-        
+        <div className = "nestedContainer">
         
         <div className="form-group-submit">
         
@@ -32,7 +31,7 @@ export default function RecipeForm(props) {
           <div className= "topInputs">
             <div className ="title">
           <label>
-            <p>Title&nbsp;</p>
+            <p className="pRecipe">Title&nbsp;</p>
             <input
               value={values.title}
               onChange={onChange}
@@ -44,7 +43,7 @@ export default function RecipeForm(props) {
           </div>
           <div className = "source">
           <label>
-            <p>Source&nbsp;</p>
+            <p className="pRecipe">Source&nbsp;</p>
             <input
               value={values.source}
               onChange={onChange}
@@ -110,17 +109,7 @@ export default function RecipeForm(props) {
 
            {/* 🔥 DISABLE THE BUTTON */}
 
-
-
-
-
-
-           <button disabled={disabled}><span>S</span><span>U</span><span>B</span><span>M</span><span>I</span><span>T</span><span></span> <i>R</i><i>e</i><i>c</i><i>i</i><i>p</i><i>e</i><i></i></button>
-
-
-
-
-
+           <button className = "recipeButton" disabled={disabled}>Submit Recipe</button>
 
            <div className="errors">
             {/* 🔥 RENDER THE VALIDATION ERRORS HERE */}
@@ -133,7 +122,7 @@ export default function RecipeForm(props) {
           
           </fieldset>
         </div>
-        
+        </div>
       </form>
     );
   }

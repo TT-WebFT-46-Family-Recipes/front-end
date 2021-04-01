@@ -1,24 +1,27 @@
-body {
+.formContainer {
 	background-image: linear-gradient(transparent, transparent),
 		url("/src/recipeForm/images/pexels-pixabay-256318.jpg");
 	background-size: cover;
 	background-position: center;
 	background-repeat: no-repeat;
 	color: #5a5a5a;
+	height: 100vh;
 }
-.formContainer {
-	width: 570px;
-	height: 630px;
+.nestedContainer {
+	width: auto;
+	height: auto;
 	background: #e6e6e6;
 	border-radius: 8px;
 	box-shadow: 0 0 40px -10px #000;
-	margin: calc(50vh - 220px) auto;
-	padding: 20px 30px;
+	margin: 0 auto;
+	padding: 1% 1%;
 	max-width: calc(100vw - 40px);
 	box-sizing: border-box;
 	font-family: "Montserrat", sans-serif;
-	position: relative;
-	left: 200px;
+	position: absolute;
+	top: 5vh;
+	left: 45%;
+   
 }
 .form-group-submit {
 	display: flex;
@@ -33,26 +36,28 @@ body {
 	flex-direction: row;
 }
 .recipeContainer {
-	height: 570px;
-	width: 500px;
+    height: 80%;
+    width: 80%;
+  
 	border-radius: 10px;
 }
 .ingredients {
-	padding: 10px;
+	padding: 2vh;
 	border-radius: 8px;
 }
 .instructions {
-	padding: 10px;
+	padding: 2vh;
 	border-radius: 8px;
 }
 .category {
 	padding: 10px;
 }
 .errors {
+    text-align: center;
 	color: red;
 	font-size: 12px;
 }
-input {
+.formInput {
 	width: 100%;
 	padding: 10px;
 	box-sizing: border-box;
@@ -64,22 +69,22 @@ input {
 	transition: all 0.3s;
 	border-bottom: 2px solid #bebed2;
 }
-input:focus {
+.formInput:focus {
 	border-bottom: 2px solid #78788c;
 }
-p:before {
+.pRecipe:before {
 	content: attr(type);
 	display: block;
 	margin: 28px 0 0;
 	font-size: 14px;
 	color: #5a5a5a;
 }
-button {
+.recipeButton {
 	background: #78788c;
 	color: #fff;
 }
 
-button {
+.recipeButton {
 	color: #fff;
 	font-family: sans-serif;
 	font-weight: bold;
@@ -93,14 +98,5 @@ button {
 	height: 50px;
 	width: 200px;
 	margin: 5% auto;
-	border: 1px solid #fff;
-}
-button span,
-button i {
-	display: inline-block;
-	z-index: 100;
-}
-
-button i {
-	font-style: normal;
+	border: 1px solid #ffffff;
 }
