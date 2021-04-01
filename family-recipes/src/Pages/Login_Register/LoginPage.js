@@ -43,7 +43,6 @@ const LoginPage = ({ signedIn, signIn }) => {
 
 	const history = useHistory();
 
-	// used to set css classes and do things like: hide/show drawer which contains register form
 	const showRegisterForm = () => {
 		setRegisterFormOpen((registerFormOpen) => !registerFormOpen);
 	};
@@ -154,7 +153,7 @@ const LoginPage = ({ signedIn, signIn }) => {
 			setInvalidAttempt((invalidAttempt) => (invalidAttempt += 1));
 			setLoginFormVals({ username: "", password: "" });
 		}
-		// history.push("/dashboard");
+		history.push("/dashboard");
 	};
 
 	const register = (evt) => {
@@ -167,7 +166,7 @@ const LoginPage = ({ signedIn, signIn }) => {
 			setInvalidAttempt((invalidAttempt) => (invalidAttempt += 1));
 			setRegisterFormVals({ username: "", password: "" });
 		}
-		// history.push("/dashboard");
+		history.push("/dashboard");
 	};
 
 	return (
