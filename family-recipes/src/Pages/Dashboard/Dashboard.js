@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Header from '../Header'
 import styled from 'styled-components'
 import { StyledFilters, StyledRecipeContainer } from './styles'
@@ -6,6 +6,8 @@ import { useSelector } from 'react-redux'
 import DotLoader from 'react-spinners/DotLoader'
 import { css } from '@emotion/core'
 import { useHistory } from 'react-router'
+import { axiosWithAuth } from '../../helper/AxiosWithAuth'
+import axios from 'axios'
 
 const StyledDashboard = styled.section`
   height: 100vh;
@@ -20,7 +22,7 @@ const loader = css`
 `
 
 const Dashboard = ({ signedIn, signIn }) => {
-  const { isLoading } = useSelector((state) => state)
+  const { isLoading, recipes } = useSelector((state) => state)
 
   const [clicked, setClicked] = useState(false)
 
@@ -29,6 +31,18 @@ const Dashboard = ({ signedIn, signIn }) => {
   const click = () => {
     setClicked((clicked) => !clicked)
   }
+
+  useEffect(() => {
+    axiosWithAuth()
+      .get('https://tt-webft-46-family-recipes.herokuapp.com/api/recipes')
+      .then((res) => {
+        console.log(res)
+        // console.log(res.data)
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  }, [recipes])
 
   return (
     <>
@@ -45,7 +59,7 @@ const Dashboard = ({ signedIn, signIn }) => {
             <input name="search" placeholder="search:"></input>
           </div>
         </StyledFilters>
-        {true ? (
+        {isLoading ? (
           <DotLoader color={'#fb5c7c'} loading={true} css={loader} size={150} />
         ) : (
           <StyledRecipeContainer>
