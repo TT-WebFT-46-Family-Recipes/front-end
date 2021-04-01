@@ -43,12 +43,11 @@ const LoginPage = ({ signedIn, signIn }) => {
   const [invalidAttempt, setInvalidAttempt] = useState(0)
   const [registerFormOpen, setRegisterFormOpen] = useState(false)
 
+  const { push } = useHistory()
 
-	const { push } = useHistory();
-
-	const showRegisterForm = () => {
-		setRegisterFormOpen((registerFormOpen) => !registerFormOpen);
-	};
+  const showRegisterForm = () => {
+    setRegisterFormOpen((registerFormOpen) => !registerFormOpen)
+  }
 
   useEffect(() => {
     if (registerFormOpen) {
@@ -167,6 +166,7 @@ const LoginPage = ({ signedIn, signIn }) => {
         })
         .catch((err) => {
           console.log(err.message)
+          push('/login')
         })
     } else {
       setInvalidAttempt((invalidAttempt) => (invalidAttempt += 1))

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Route, Redirect } from 'react-router-dom'
+import { Route } from 'react-router-dom'
 
 const PrivateRoute = ({ component: Component, ...rest }) => {
   return (
@@ -7,10 +7,7 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
       {...rest}
       render={(props) => {
         if (localStorage.getItem('token')) {
-          console.log('testing')
           return <Component {...props} />
-        } else {
-          return <Redirect to="/dashboard" />
         }
       }}
     />
