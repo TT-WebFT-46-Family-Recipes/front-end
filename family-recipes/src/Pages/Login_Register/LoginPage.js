@@ -1,221 +1,279 @@
-import React, { useEffect, useState } from 'react'
-import Header from '../Header'
-import { LoginForm } from './LoginForm'
-import styled from 'styled-components'
-import img from '../../Assets/loginbackground.jpg'
-import { useHistory } from 'react-router'
-import * as yup from 'yup'
-import schema from './formSchema'
-import axios from 'axios'
-import { axiosWithAuth } from '../../helper/AxiosWithAuth'
+import React, { useEffect, useState } from "react";
+import Header from "../Header";
+import { LoginForm } from "./LoginForm";
+import styled from "styled-components";
+import img from "../../Assets/loginbackground.jpg";
+import * as yup from "yup";
+import schema from "./formSchema";
+import axios from "axios";
+import { useHistory } from "react-router";
 
 const StyledLoginPage = styled.section`
-  background-image: url(${img});
-  background-size: cover;
-  background-position: 30% 70%;
-  background-repeat: no-repeat;
-  position: fixed;
-  height: 100vh;
-  width: 100%;
-`
+	background-image: url(${img});
+	background-size: cover;
+	background-position: 30% 70%;
+	background-repeat: no-repeat;
+	position: fixed;
+	height: 100vh;
+	width: 100%;
+`;
 
 const LoginPage = ({ signedIn, signIn }) => {
-  const [loginFormVals, setLoginFormVals] = useState({
-    username: '',
-    password: '',
-  })
-  const [registerFormVals, setRegisterFormVals] = useState({
-    username: '',
-    password: '',
-  })
-  const [loginFormErrors, setLoginFormErrors] = useState({
-    username: 'username must be 6 characters long',
-    password: 'password must be 8 characters long',
-  })
-  const [registerFormErrors, setRegisterFormErrors] = useState({
-    username: 'username must be 6 characters long',
-    password: 'password must be 8 characters long',
-  })
-  const [userLoggedIn, setUserLoggedIn] = useState({})
-  const [newUser, setNewUser] = useState({})
-  const [loginValidated, setLoginValidated] = useState(false)
-  const [registerValidated, setRegisterValidated] = useState(false)
-  const [invalidAttempt, setInvalidAttempt] = useState(0)
-  const [registerFormOpen, setRegisterFormOpen] = useState(false)
-
-
 	const { push } = useHistory();
 
+	const [loginFormVals, setLoginFormVals] = useState({
+		username: "",
+		password: "",
+	});
+	const [registerFormVals, setRegisterFormVals] = useState({
+		username: "",
+		password: "",
+	});
+	const [loginFormErrors, setLoginFormErrors] = useState({
+		username: "username must be 6 characters long",
+		password: "password must be 8 characters long",
+	});
+	const [registerFormErrors, setRegisterFormErrors] = useState({
+		username: "username must be 6 characters long",
+		password: "password must be 8 characters long",
+	});
+	const [loginValidated, setLoginValidated] = useState(false);
+	const [registerValidated, setRegisterValidated] = useState(false);
+	const [registerFormOpen, setRegisterFormOpen] = useState(false);
+
+	const [attemptMsg, setAttemptMsg] = useState({
+		success: true,
+		formValidationFailed: false,
+		incorrectCredentials: false,
+		userAlreadyExists: false,
+	});
+
+	/* used to determine if the register form drawer is open or closed */
 	const showRegisterForm = () => {
 		setRegisterFormOpen((registerFormOpen) => !registerFormOpen);
 	};
 
-  useEffect(() => {
-    if (registerFormOpen) {
-      setLoginFormVals({ username: '', password: '' })
-      setInvalidAttempt(0)
-    } else {
-      setRegisterFormVals({ username: '', password: '' })
-      setInvalidAttempt(0)
-    }
-  }, [registerFormOpen])
+	/* based on the values of name/value it will update the corresponding 
+    object in state (loginForm or registerForm) */
+	const updateForm = (name, value) => {
+		switch (name) {
+			case "username":
+			case "password":
+				setLoginFormVals({
+					...loginFormVals,
+					[name]: value.replace(/\s+/g, ""),
+				});
+				break;
+			case "newUserUn":
+				name = "username";
+				setRegisterFormVals({
+					...registerFormVals,
+					[name]: value.replace(/\s+/g, ""),
+				});
+				break;
+			case "newUserPass":
+				name = "password";
+				setRegisterFormVals({
+					...registerFormVals,
+					[name]: value.replace(/\s+/g, ""),
+				});
+				break;
+			default:
+				break;
+		}
+	};
 
-  const updateForm = (name, value) => {
-    switch (name) {
-      case 'username':
-      case 'password':
-        setLoginFormVals({
-          ...loginFormVals,
-          [name]: value.replace(/\s+/g, ''),
-        })
-        break
-      case 'newUserUn':
-        name = 'username'
-        setRegisterFormVals({
-          ...registerFormVals,
-          [name]: value.replace(/\s+/g, ''),
-        })
-        break
-      case 'newUserPass':
-        name = 'password'
-        setRegisterFormVals({
-          ...registerFormVals,
-          [name]: value.replace(/\s+/g, ''),
-        })
-        break
-      default:
-        break
-    }
-  }
+	/* resets the username and password fields as well as the attempt 
+    message object in state when the drawer opens and closes */
+	useEffect(() => {
+		if (registerFormOpen) {
+			setLoginFormVals({ username: "", password: "" });
+			setAttemptMsg({
+				success: true,
+				formValidationFailed: false,
+				incorrectCredentials: false,
+				userAlreadyExists: false,
+			});
+		} else {
+			setRegisterFormVals({ username: "", password: "" });
+			setAttemptMsg({
+				success: true,
+				formValidationFailed: false,
+				incorrectCredentials: false,
+				userAlreadyExists: false,
+			});
+		}
+	}, [registerFormOpen]);
 
-  useEffect(() => {
-    for (const key of Object.keys(loginFormVals))
-      yup
-        .reach(schema, key)
-        .validate(loginFormVals[key])
-        .then(() => {
-          setLoginFormErrors(
-            (loginFormErrors) =>
-              (loginFormErrors = {
-                ...loginFormErrors,
-                [key]: '',
-              })
-          )
-        })
-        .catch((err) => {
-          setLoginFormErrors(
-            (loginFormErrors) =>
-              (loginFormErrors = {
-                ...loginFormErrors,
-                [key]: err.errors[0],
-              })
-          )
-        })
-  }, [loginFormVals])
+	/* performs form validation for login form using yup */
+	useEffect(() => {
+		for (const key of Object.keys(loginFormVals))
+			yup.reach(schema, key)
+				.validate(loginFormVals[key])
+				.then(() => {
+					setLoginFormErrors(
+						(loginFormErrors) =>
+							(loginFormErrors = {
+								...loginFormErrors,
+								[key]: "",
+							})
+					);
+				})
+				.catch((err) => {
+					setLoginFormErrors(
+						(loginFormErrors) =>
+							(loginFormErrors = {
+								...loginFormErrors,
+								[key]: err.errors[0],
+							})
+					);
+				});
+	}, [loginFormVals]);
 
-  useEffect(() => {
-    for (const key of Object.keys(registerFormVals))
-      yup
-        .reach(schema, key)
-        .validate(registerFormVals[key])
-        .then(() => {
-          setRegisterFormErrors(
-            (registerFormErrors) =>
-              (registerFormErrors = {
-                ...registerFormErrors,
-                [key]: '',
-              })
-          )
-        })
-        .catch((err) => {
-          setRegisterFormErrors(
-            (registerFormErrors) =>
-              (registerFormErrors = {
-                ...registerFormErrors,
-                [key]: err.errors[0],
-              })
-          )
-        })
-  }, [registerFormVals])
+	/* performs form validation for register form using yup */
+	useEffect(() => {
+		for (const key of Object.keys(registerFormVals))
+			yup.reach(schema, key)
+				.validate(registerFormVals[key])
+				.then(() => {
+					setRegisterFormErrors(
+						(registerFormErrors) =>
+							(registerFormErrors = {
+								...registerFormErrors,
+								[key]: "",
+							})
+					);
+				})
+				.catch((err) => {
+					setRegisterFormErrors(
+						(registerFormErrors) =>
+							(registerFormErrors = {
+								...registerFormErrors,
+								[key]: err.errors[0],
+							})
+					);
+				});
+	}, [registerFormVals]);
 
-  useEffect(() => {
-    if (loginFormErrors.username === '' && loginFormErrors.password === '')
-      setLoginValidated((loginValidated) => !loginValidated)
-    if (
-      registerFormErrors.username === '' &&
-      registerFormErrors.password === ''
-    )
-      setRegisterValidated((registerValidated) => !registerValidated)
-  }, [loginFormErrors, registerFormErrors, registerFormOpen])
+	/* changes login and register validation state based on if yup 
+    finds any errors with the forms (min/required values met) */
+	useEffect(() => {
+		if (loginFormErrors.username === "" && loginFormErrors.password === "")
+			setLoginValidated(true);
+		else if (
+			loginFormErrors.username !== "" ||
+			loginFormErrors.password !== ""
+		)
+			setLoginValidated(false);
+		if (
+			registerFormErrors.username === "" &&
+			registerFormErrors.password === ""
+		)
+			setRegisterValidated(true);
+		else if (
+			registerFormErrors.username !== "" ||
+			registerFormErrors.password !== ""
+		)
+			setRegisterValidated(false);
+	}, [loginFormErrors, registerFormErrors, registerFormOpen, attemptMsg]);
 
-  const logIn = (evt) => {
-    evt.preventDefault()
-    if (loginValidated) {
-      setUserLoggedIn({ ...loginFormVals })
-      signIn((signedIn) => !signedIn)
-      setLoginFormVals({ username: '', password: '' })
+	/* resets the login and register validation state when the 
+    drawer opens and closes  */
+	useEffect(() => {
+		if (registerFormOpen) {
+			setLoginValidated(false);
+		} else setRegisterValidated(false);
+	}, [registerFormOpen]);
 
-      axios
-        .post(
-          'https://tt-webft-46-family-recipes.herokuapp.com/api/auth/login',
-          loginFormVals
-        )
-        .then((res) => {
-          console.log(res)
-          localStorage.setItem('token', JSON.stringify(res.data))
-          push('/dashboard')
-        })
-        .catch((err) => {
-          console.log(err.message)
-        })
-    } else {
-      setInvalidAttempt((invalidAttempt) => (invalidAttempt += 1))
-      setLoginFormVals({ username: '', password: '' })
-    }
-  }
+	/* performs the login authentication and sets corresponding errors 
+    according to the attempt message object in state (if any) */
+	const logIn = (evt) => {
+		evt.preventDefault();
+		if (loginValidated) {
+			axios
+				.post(
+					"https://tt-webft-46-family-recipes.herokuapp.com/api/auth/login",
+					loginFormVals
+				)
+				.then((res) => {
+					localStorage.setItem("token", JSON.stringify(res.data));
+					setLoginFormVals({ username: "", password: "" });
+					signIn((signedIn) => !signedIn);
+					push("/dashboard");
+				})
+				.catch((err) => {
+					setLoginFormVals({ username: "", password: "" });
+					setAttemptMsg({
+						...attemptMsg,
+						incorrectCredentials: true,
+						formValidationFailed: false,
+						success: false,
+					});
+				});
+		} else {
+			setAttemptMsg({
+				...attemptMsg,
+				incorrectCredentials: false,
+				formValidationFailed: true,
+				success: false,
+			});
+			setLoginFormVals({ username: "", password: "" });
+		}
+	};
 
-  const register = (evt) => {
-    evt.preventDefault()
-    if (registerValidated) {
-      setNewUser({ ...registerFormVals })
-      signIn((signedIn) => !signedIn)
-      setRegisterFormVals({ username: '', password: '' })
+	/* performs the register authentication and sets corresponding errors 
+    according to the attempt message object in state (if any) */
+	const register = (evt) => {
+		evt.preventDefault();
+		if (registerValidated) {
+			axios
+				.post(
+					"https://tt-webft-46-family-recipes.herokuapp.com/api/auth/register",
+					registerFormVals
+				)
+				.then((res) => {
+					localStorage.setItem("token", JSON.stringify(res.data));
+					setRegisterFormVals({ username: "", password: "" });
+					signIn((signedIn) => !signedIn);
+					push("/dashboard");
+				})
+				.catch((err) => {
+					setRegisterFormVals({ username: "", password: "" });
+					setAttemptMsg({
+						...attemptMsg,
+						userAlreadyExists: true,
+						formValidationFailed: false,
+						success: false,
+					});
+				});
+		} else {
+			setAttemptMsg({
+				...attemptMsg,
+				userAlreadyExists: false,
+				formValidationFailed: true,
+				success: false,
+			});
+			setRegisterFormVals({ username: "", password: "" });
+		}
+	};
 
-      axios
-        .post(
-          'https://tt-webft-46-family-recipes.herokuapp.com/api/auth/register',
-          registerFormVals
-        )
-        .then((res) => {
-          localStorage.setItem('token', JSON.stringify(res.data))
-          push('/dashboard')
-        })
-        .catch((err) => {
-          console.log(err.message)
-        })
-    } else {
-      setInvalidAttempt((invalidAttempt) => (invalidAttempt += 1))
-      setRegisterFormVals({ username: '', password: '' })
-    }
-  }
+	return (
+		<>
+			<Header signedIn={signedIn} signIn={signIn} />
+			<StyledLoginPage>
+				<LoginForm
+					update={updateForm}
+					loginVals={loginFormVals}
+					registerVals={registerFormVals}
+					logIn={logIn}
+					register={register}
+					registerFormOpen={registerFormOpen}
+					showRegisterForm={showRegisterForm}
+					attemptMsg={attemptMsg}
+				/>
+			</StyledLoginPage>
+		</>
+	);
+};
 
-  return (
-    <>
-      <Header signedIn={signedIn} signIn={signIn} />
-      <StyledLoginPage>
-        <LoginForm
-          update={updateForm}
-          loginVals={loginFormVals}
-          registerVals={registerFormVals}
-          logIn={logIn}
-          register={register}
-          registerFormOpen={registerFormOpen}
-          showRegisterForm={showRegisterForm}
-          invalidAttempt={invalidAttempt}
-        />
-      </StyledLoginPage>
-    </>
-  )
-}
-
-export default LoginPage
+export default LoginPage;
