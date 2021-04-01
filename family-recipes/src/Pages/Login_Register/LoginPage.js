@@ -7,6 +7,7 @@ import { useHistory } from 'react-router'
 import * as yup from 'yup'
 import schema from './formSchema'
 import axios from 'axios'
+import { axiosWithAuth } from '../../helper/AxiosWithAuth'
 
 const StyledLoginPage = styled.section`
   background-image: url(${img});
@@ -153,7 +154,20 @@ const LoginPage = ({ signedIn, signIn }) => {
       setUserLoggedIn({ ...loginFormVals })
       signIn((signedIn) => !signedIn)
       setLoginFormVals({ username: '', password: '' })
-      push('/dashboard')
+
+      axios
+        .post(
+          'https://tt-webft-46-family-recipes.herokuapp.com/api/auth/login',
+          loginFormVals
+        )
+        .then((res) => {
+          console.log(res)
+          localStorage.setItem('token', JSON.stringify(res.data))
+          push('/dashboard')
+        })
+        .catch((err) => {
+          console.log(err.message)
+        })
     } else {
       setInvalidAttempt((invalidAttempt) => (invalidAttempt += 1))
       setLoginFormVals({ username: '', password: '' })
@@ -166,7 +180,19 @@ const LoginPage = ({ signedIn, signIn }) => {
       setNewUser({ ...registerFormVals })
       signIn((signedIn) => !signedIn)
       setRegisterFormVals({ username: '', password: '' })
-      push('/dashboard')
+
+      axios
+        .post(
+          'https://tt-webft-46-family-recipes.herokuapp.com/api/auth/register',
+          registerFormVals
+        )
+        .then((res) => {
+          localStorage.setItem('token', JSON.stringify(res.data))
+          push('/dashboard')
+        })
+        .catch((err) => {
+          console.log(err.message)
+        })
     } else {
       setInvalidAttempt((invalidAttempt) => (invalidAttempt += 1))
       setRegisterFormVals({ username: '', password: '' })

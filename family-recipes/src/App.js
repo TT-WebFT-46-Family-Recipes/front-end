@@ -6,6 +6,7 @@ import { useState } from 'react'
 
 import React from 'react'
 import RecipeEntry from './recipeForm/RecipeEntry'
+import PrivateRoute from './Pages/PrivateRoute'
 
 function App() {
   const [signedIn, setSignedIn] = useState(false)
@@ -13,9 +14,7 @@ function App() {
   return (
     <Router>
       <Switch>
-        <Route path="/dashboard">
-          <Dashboard signedIn={signedIn} signIn={setSignedIn} />
-        </Route>
+        <PrivateRoute path="/dashboard" component={Dashboard} />
         <Route path="/">
           <LoginPage signedIn={signedIn} signIn={setSignedIn} />
         </Route>
