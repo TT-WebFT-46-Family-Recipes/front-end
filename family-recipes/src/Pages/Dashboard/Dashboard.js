@@ -23,7 +23,7 @@ const loader = css`
 	top: 30%;
 `;
 
-const Dashboard = ({ signedIn, signOut }) => {
+const Dashboard = ({ signedIn, signIn }) => {
 	const { isLoading } = useSelector((state) => state);
 
 	const [clicked, setClicked] = useState(false);
@@ -34,7 +34,7 @@ const Dashboard = ({ signedIn, signOut }) => {
 
 	return (
 		<>
-			<Header signedIn={signedIn} signOut={signOut} />
+			<Header signedIn={signedIn} signIn={signIn} />
 			<StyledDashboard>
 				<StyledFilters>
 					<div className="filters">

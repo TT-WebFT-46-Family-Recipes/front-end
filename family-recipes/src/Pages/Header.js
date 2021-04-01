@@ -43,7 +43,7 @@ const StyledHeader = styled.header`
 	}
 `;
 
-const Header = ({ signedIn, signOut }) => {
+const Header = ({ signedIn, signIn }) => {
 	return (
 		<StyledHeader>
 			<Link className="logo" to="/">
@@ -61,7 +61,7 @@ const Header = ({ signedIn, signOut }) => {
 					<NavLink
 						className="a"
 						to="/"
-						onClick={() => signOut(!signedIn)}
+						onClick={() => signIn(!signedIn)}
 					>
 						Log Out
 					</NavLink>
