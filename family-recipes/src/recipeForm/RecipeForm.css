@@ -21,7 +21,6 @@
 	position: absolute;
 	top: 5vh;
 	left: 45%;
-   
 }
 .form-group-submit {
 	display: flex;
@@ -36,9 +35,9 @@
 	flex-direction: row;
 }
 .recipeContainer {
-    height: 80%;
-    width: 80%;
-  
+	height: 80%;
+	width: 80%;
+
 	border-radius: 10px;
 }
 .ingredients {
@@ -53,7 +52,7 @@
 	padding: 10px;
 }
 .errors {
-    text-align: center;
+	text-align: center;
 	color: red;
 	font-size: 12px;
 }
