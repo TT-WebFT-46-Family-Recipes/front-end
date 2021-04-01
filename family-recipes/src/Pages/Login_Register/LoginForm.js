@@ -1,43 +1,45 @@
-import React, { useState } from "react";
+import React from "react";
 import StyledForm from "./StyledForm";
 
 export const LoginForm = ({
-	loginFormChange,
-	registerFormChange,
+	update,
 	loginVals,
 	registerVals,
 	logIn,
 	register,
+	registerFormOpen,
+	showRegisterForm,
+	invalidAttempt,
 }) => {
-	const [clicked, setClicked] = useState(false);
-
-	// used to set css classes and do things like: hide/show drawer which contains register form
-	const click = () => {
-		setClicked(!clicked);
-	};
-
 	const updateVals = (evt) => {
-		// name === 'username' or 'password' means existing user is logging in else a new user is registering
-		if (evt.target.name === "username" || evt.target.name === "password")
-			loginFormChange(evt.target.name, evt.target.value);
-		else registerFormChange(evt.target.name, evt.target.value);
+		update(evt.target.name, evt.target.value);
 	};
 
 	return (
-		<StyledForm clicked={clicked}>
+		<StyledForm registerFormOpen={registerFormOpen}>
 			<div
-				className={clicked ? "form-toggle visible" : "form-toggle"}
-				onClick={clicked ? click : null}
+				className={
+					registerFormOpen ? "form-toggle visible" : "form-toggle"
+				}
+				onClick={registerFormOpen ? showRegisterForm : null}
 			></div>
 			<div
-				className={clicked ? "form-panel one hidden" : "form-panel one"}
+				className={
+					registerFormOpen
+						? "form-panel one hidden"
+						: "form-panel one"
+				}
 			>
 				<h2 className="title">Sign in</h2>
 				<form onSubmit={logIn}>
 					<input
 						className="inputs"
 						type="text"
-						placeholder="Username"
+						placeholder={
+							invalidAttempt === 0
+								? "Username"
+								: "At least 6 characters"
+						}
 						name="username"
 						value={loginVals.username}
 						onChange={updateVals}
@@ -45,35 +47,51 @@ export const LoginForm = ({
 					<input
 						className="inputs"
 						type="password"
-						placeholder="Password"
+						placeholder={
+							invalidAttempt === 0
+								? "Password"
+								: "At least 8 characters"
+						}
 						name="password"
 						value={loginVals.password}
 						onChange={updateVals}
 					></input>
 					<button>Sign in</button>
-					<span onClick={click}>Register?</span>
+					<span onClick={showRegisterForm}>Register?</span>
 				</form>
 			</div>
 			<div
-				className={clicked ? "form-panel two active" : "form-panel two"}
-				onClick={clicked ? null : click}
+				className={
+					registerFormOpen
+						? "form-panel two active"
+						: "form-panel two"
+				}
+				onClick={registerFormOpen ? null : showRegisterForm}
 			>
 				<h2 className="titleRegister">Sign Up</h2>
 				<form onSubmit={register}>
 					<input
 						className="inputsRegister"
 						type="text"
-						placeholder="Username"
+						placeholder={
+							invalidAttempt === 0
+								? "Username"
+								: "At least 6 characters"
+						}
 						name="newUserUn"
-						value={registerVals.newUserUn}
+						value={registerVals.username}
 						onChange={updateVals}
 					></input>
 					<input
 						className="inputsRegister"
 						type="text"
-						placeholder="Password"
+						placeholder={
+							invalidAttempt === 0
+								? "Password"
+								: "At least 8 characters"
+						}
 						name="newUserPass"
-						value={registerVals.newUserPass}
+						value={registerVals.password}
 						onChange={updateVals}
 					></input>
 					<button className="btnRegister">Submit!</button>

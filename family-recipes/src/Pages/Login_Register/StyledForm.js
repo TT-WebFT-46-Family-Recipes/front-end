@@ -121,7 +121,7 @@ const StyledForm = styled.div`
 		background: #ffffff;
 		border-radius: 100%;
 		opacity: 0;
-		cursor: ${(props) => (props.clicked ? "pointer" : "default")};
+		cursor: ${(props) => (props.registerFormOpen ? "pointer" : "default")};
 		transition: all 0.3s ease;
 	}
 
@@ -132,9 +132,10 @@ const StyledForm = styled.div`
 		position: absolute;
 		top: 50%;
 		left: 50%;
-		width: 30px;
+		width: 40px;
 		height: 4px;
-		background: #ffffff;
+		border-radius: 10px;
+		background: #ef3737;
 		transform: translate(-50%, -50%);
 	}
 
