@@ -42,7 +42,7 @@ function App() {
 					path="/"
 					component={() => {
 						window.location.href =
-							"https://https://marketing-pi.vercel.app/";
+							"https://marketing-pi.vercel.app/";
 					}}
 				/>
 			</Switch>
