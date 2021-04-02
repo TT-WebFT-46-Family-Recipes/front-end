@@ -38,9 +38,7 @@ function App() {
 				</Route>
 
 				{/* marketing page */}
-				{/* <Route path="/">
-          <Link to="/login">Test</Link>
-        </Route> */}
+				<Route path="https://marketing-pi.vercel.app/" />
 			</Switch>
 		</Router>
 	);
