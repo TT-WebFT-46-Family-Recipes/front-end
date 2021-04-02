@@ -58,7 +58,7 @@ const Header = ({ signedIn, signIn }) => {
 				></img>
 			</Link>
 			<div>
-				<NavLink className="a" to="/">
+				<NavLink className="a" to="https://front-end2-bice.vercel.app/">
 					Home
 				</NavLink>
 

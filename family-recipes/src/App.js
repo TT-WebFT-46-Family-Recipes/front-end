@@ -38,9 +38,8 @@ function App() {
 				</Route>
 
 				{/* marketing page */}
-				<Route path="/">
-					<Link to="/login">Test</Link>
-				</Route>
+				{/* <Route path="https://front-end2-bice.vercel.app/">
+				</Route> */}
 			</Switch>
 		</Router>
 	);
