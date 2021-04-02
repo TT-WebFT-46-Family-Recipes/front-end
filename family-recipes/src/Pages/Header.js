@@ -68,7 +68,7 @@ const Header = ({ signedIn, signIn }) => {
 					</NavLink>
 				)} */}
 
-				<NavLink className="a" to="/">
+				<NavLink className="a" to={signedIn ? "/dashboard" : "/"}>
 					Home
 				</NavLink>
 
