@@ -38,7 +38,12 @@ function App() {
 				</Route>
 
 				{/* marketing page */}
-				<Route path="https://marketing-pi.vercel.app/" />
+				<Route
+					path="/"
+					component={() => {
+						window.location.href = "https://example.com/1234";
+					}}
+				/>
 			</Switch>
 		</Router>
 	);
