@@ -58,7 +58,7 @@ const Header = ({ signedIn, signIn }) => {
 				></img>
 			</Link>
 			<div>
-				{signedIn ? (
+				{/* {signedIn ? (
 					<NavLink className="a" to="/dashboard">
 						Home
 					</NavLink>
@@ -66,7 +66,11 @@ const Header = ({ signedIn, signIn }) => {
 					<NavLink className="a" to="/">
 						Home
 					</NavLink>
-				)}
+				)} */}
+
+				<NavLink className="a" to="/">
+					Home
+				</NavLink>
 
 				{signedIn ? (
 					<NavLink className="a" to="/login" onClick={manageSignIn}>
