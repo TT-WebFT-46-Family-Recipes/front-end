@@ -32,8 +32,6 @@ const Dashboard = ({ signedIn, signIn }) => {
 		dispatch(fetchRecipeData());
 	}, [dispatch]);
 
-	console.log(glRecipes);
-
 	return (
 		<>
 			<Header signedIn={signedIn} signIn={signIn} />

@@ -1,120 +1,107 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from "react";
 // import axios from 'axios'
-import * as yup from 'yup'
-import RecipeForm from './RecipeForm'
-import schema from './validation/formSchema'
+import * as yup from "yup";
+import RecipeForm from "./RecipeForm";
+import schema from "./validation/formSchema";
 // import { useHistory } from 'react-router'
 // import { useSelector } from 'react-redux'
 // import { useDispatch } from 'react-redux'
 // import { addNewRecipe } from '../../store/actions'
-import { axiosWithAuth } from '../../helper/AxiosWithAuth'
+import { axiosWithAuth } from "../../helper/AxiosWithAuth";
 
 const initialFormValues = {
-  title: '',
-  source: '',
-  ingredients: '',
-  instructions: '',
-  category: '',
-}
+	title: "",
+	source: "",
+	ingredients: "",
+	instructions: "",
+	category: "",
+};
 
 const initialFormErrors = {
-  title: '',
-  source: '',
-  ingredients: '',
-  instructions: '',
-  category: '',
-}
+	title: "",
+	source: "",
+	ingredients: "",
+	instructions: "",
+	category: "",
+};
 
-// const initialRecipes = []
-const initialDisabled = true
+const initialDisabled = true;
 
 export default function RecipeEntry() {
-  //   const [recipes, setRecipes] = useState(initialRecipes) // array of friend objects
-  const [formValues, setFormValues] = useState(initialFormValues) // object
-  const [formErrors, setFormErrors] = useState(initialFormErrors) // object
-  const [disabled, setDisabled] = useState(initialDisabled) // boolean
+	const [formValues, setFormValues] = useState(initialFormValues); // object
+	const [formErrors, setFormErrors] = useState(initialFormErrors); // object
+	const [disabled, setDisabled] = useState(initialDisabled); // boolean
 
-  // const { glRecipes } = useSelector((state) => state)
-  // const dispatch = useDispatch()
-  // console.log(glRecipes)
+	const postNewRecipes = (newRecipes) => {
+		axiosWithAuth()
+			.post(
+				"https://tt-webft-46-family-recipes.herokuapp.com/api/recipes",
+				newRecipes
+			)
+			.then((res) => {})
+			.catch((err) => {
+				console.log({ err });
+			});
+	};
 
-  //   const { push } = useHistory()
+	const inputChange = (name, value) => {
+		yup.reach(schema, name)
 
-  const postNewRecipes = (newRecipes) => {
-    axiosWithAuth()
-      .post(
-        'https://tt-webft-46-family-recipes.herokuapp.com/api/recipes',
-        newRecipes
-      )
-      .then((res) => {
-        // console.log(res)
-      })
-      .catch((err) => {
-        console.log({ err })
-      })
-    // dispatch(addNewRecipe(newRecipes))
-    // push('/dashboard')
-  }
+			.validate(value)
+			.then(() => {
+				setFormErrors({
+					...formErrors,
+					[name]: "",
+				});
+			})
 
-  const inputChange = (name, value) => {
-    yup
-      .reach(schema, name)
+			.catch((err) => {
+				setFormErrors({
+					...formErrors,
 
-      .validate(value)
-      .then(() => {
-        setFormErrors({
-          ...formErrors,
-          [name]: '',
-        })
-      })
+					[name]: err.errors[0],
+				});
+			});
+		setFormValues({
+			...formValues,
+			[name]: value,
+		});
+	};
 
-      .catch((err) => {
-        setFormErrors({
-          ...formErrors,
+	const formSubmit = () => {
+		const newRecipes = {
+			title: formValues.title.trim(),
+			source: formValues.source.trim(),
+			ingredients: formValues.ingredients.trim(),
+			instructions: formValues.instructions.trim(),
 
-          [name]: err.errors[0],
-        })
-      })
-    setFormValues({
-      ...formValues,
-      [name]: value,
-    })
-  }
+			category: ["dinner", "chicken", "dessert", "pasta", "other"].filter(
+				(category) => formValues[category]
+			),
+		};
 
-  const formSubmit = () => {
-    const newRecipes = {
-      title: formValues.title.trim(),
-      source: formValues.source.trim(),
-      ingredients: formValues.ingredients.trim(),
-      instructions: formValues.instructions.trim(),
+		postNewRecipes(newRecipes);
+	};
 
-      category: ['dinner', 'chicken', 'dessert', 'pasta', 'other'].filter(
-        (category) => formValues[category]
-      ),
-    }
+	// useEffect(() => {
+	//   getRecipes();
+	// }, []);
 
-    postNewRecipes(newRecipes)
-  }
+	useEffect(() => {
+		schema.isValid(formValues).then((valid) => {
+			setDisabled(!valid);
+		});
+	}, [formValues]);
 
-  // useEffect(() => {
-  //   getRecipes();
-  // }, []);
-
-  useEffect(() => {
-    schema.isValid(formValues).then((valid) => {
-      setDisabled(!valid)
-    })
-  }, [formValues])
-
-  return (
-    <div className="App">
-      <RecipeForm
-        values={formValues}
-        change={inputChange}
-        submit={formSubmit}
-        disabled={disabled}
-        errors={formErrors}
-      />
-    </div>
-  )
+	return (
+		<div className="App">
+			<RecipeForm
+				values={formValues}
+				change={inputChange}
+				submit={formSubmit}
+				disabled={disabled}
+				errors={formErrors}
+			/>
+		</div>
+	);
 }
