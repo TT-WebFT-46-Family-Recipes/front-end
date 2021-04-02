@@ -58,16 +58,6 @@ const Header = ({ signedIn, signIn }) => {
 				></img>
 			</Link>
 			<div>
-				{/* {signedIn ? (
-					<NavLink className="a" to="/dashboard">
-						Home
-					</NavLink>
-				) : (
-					<NavLink className="a" to="/">
-						Home
-					</NavLink>
-				)} */}
-
 				<NavLink className="a" to={signedIn ? "/dashboard" : "/"}>
 					Home
 				</NavLink>
