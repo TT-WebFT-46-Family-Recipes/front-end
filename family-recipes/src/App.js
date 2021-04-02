@@ -1,6 +1,6 @@
 import React from "react";
 import { BrowserRouter as Router } from "react-router-dom";
-import { Switch, Route, Link } from "react-router-dom";
+import { Switch, Route } from "react-router-dom";
 import { useState } from "react";
 import PrivateRoute from "./Pages/PrivateRoute";
 import Dashboard from "./Pages/Dashboard/Dashboard";
