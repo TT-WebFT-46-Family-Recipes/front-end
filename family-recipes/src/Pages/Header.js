@@ -63,8 +63,8 @@ const Header = ({ signedIn, signIn }) => {
 				</NavLink> */}
 
 				<Link
+					className="a"
 					to={{ pathname: "https://marketing-pi.vercel.app/" }}
-					target="_blank"
 				>
 					Home
 				</Link>
