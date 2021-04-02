@@ -50,7 +50,7 @@ const Header = ({ signedIn, signIn }) => {
 	};
 	return (
 		<StyledHeader>
-			<Link className="logo" to="https://marketing-pi.vercel.app/">
+			<Link className="logo" to="/">
 				<img
 					className="logo-img"
 					src={img}
@@ -58,7 +58,7 @@ const Header = ({ signedIn, signIn }) => {
 				></img>
 			</Link>
 			<div>
-				<NavLink className="a" to="https://marketing-pi.vercel.app/">
+				<NavLink className="a" to="/">
 					Home
 				</NavLink>
 
