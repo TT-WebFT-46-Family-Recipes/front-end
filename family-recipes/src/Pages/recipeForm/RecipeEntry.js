@@ -71,10 +71,9 @@ export default function RecipeEntry() {
 	const formSubmit = () => {
 		const newRecipes = {
 			title: formValues.title.trim(),
-			source: formValues.source.trim(),
+			author: formValues.source.trim(),
 			ingredients: formValues.ingredients.trim(),
 			instructions: formValues.instructions.trim(),
-
 			category: ["dinner", "chicken", "dessert", "pasta", "other"].filter(
 				(category) => formValues[category]
 			),
@@ -82,10 +81,6 @@ export default function RecipeEntry() {
 
 		postNewRecipes(newRecipes);
 	};
-
-	// useEffect(() => {
-	//   getRecipes();
-	// }, []);
 
 	useEffect(() => {
 		schema.isValid(formValues).then((valid) => {

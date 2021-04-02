@@ -45,6 +45,23 @@ const Dashboard = ({ signedIn, signIn }) => {
 							Add Recipe
 						</button>
 						<input name="search" placeholder="search:"></input>
+						{isLoading
+							? null
+							: glRecipes.map((recipe, idx) => {
+									return (
+										<div key={idx}>
+											<label>
+												{recipe.category_name}
+											</label>
+											<input
+												type="checkbox"
+												value={recipe.category_name}
+												name={recipe.category_name}
+											/>
+										</div>
+									);
+							  })}
+						{/* {console.log(glRecipes, "hi")} */}
 					</div>
 				</StyledFilters>
 				{isLoading ? (
@@ -61,6 +78,9 @@ const Dashboard = ({ signedIn, signIn }) => {
 								return (
 									<div
 										key={idx}
+										style={{
+											boxShadow: "0 0 40px -10px #000",
+										}}
 										className={
 											selectedRecipe.title
 												? "recipe hidden"
@@ -76,6 +96,8 @@ const Dashboard = ({ signedIn, signIn }) => {
 												padding: "0 5%",
 												marginBottom: "15%",
 												color: "#fb5c7c",
+												fontFamily:
+													'Ubuntu", sans-serif',
 											}}
 										>
 											{recipe.title}
@@ -84,6 +106,8 @@ const Dashboard = ({ signedIn, signIn }) => {
 											align="center"
 											style={{
 												color: "rgba(0, 0, 0, .7)",
+												fontFamily:
+													'Ubuntu", sans-serif',
 											}}
 										>
 											Category: {recipe.category_name}
@@ -92,6 +116,8 @@ const Dashboard = ({ signedIn, signIn }) => {
 											align="center"
 											style={{
 												color: "rgba(0, 0, 0, .7)",
+												fontFamily:
+													'Ubuntu", sans-serif',
 											}}
 										>
 											Source: {recipe.author}
@@ -101,6 +127,9 @@ const Dashboard = ({ signedIn, signIn }) => {
 							})}
 						</div>
 						<div
+							style={{
+								boxShadow: "0 0 40px -10px #000",
+							}}
 							className={
 								selectedRecipe.title
 									? "recipe-modal"
@@ -114,6 +143,7 @@ const Dashboard = ({ signedIn, signIn }) => {
 									padding: "0 5%",
 									margin: "10% 0",
 									color: "#fb5c7c",
+									fontFamily: 'Ubuntu", sans-serif',
 								}}
 							>
 								{selectedRecipe.title}
