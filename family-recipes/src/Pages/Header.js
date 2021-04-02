@@ -58,16 +58,15 @@ const Header = ({ signedIn, signIn }) => {
 				></img>
 			</Link>
 			<div>
-				{/* <NavLink className="a" to="/">
-					Home
-				</NavLink> */}
-
-				<Link
-					className="a"
-					to={{ pathname: "https://marketing-pi.vercel.app/" }}
-				>
-					Home
-				</Link>
+				{signedIn ? (
+					<NavLink className="a" to="/dashboard">
+						Home
+					</NavLink>
+				) : (
+					<NavLink className="a" to="/">
+						Home
+					</NavLink>
+				)}
 
 				{signedIn ? (
 					<NavLink className="a" to="/login" onClick={manageSignIn}>
