@@ -50,7 +50,7 @@ const Header = ({ signedIn, signIn }) => {
 	};
 	return (
 		<StyledHeader>
-			<Link className="logo" to="/">
+			<Link className="logo" to={signedIn ? "/dashboard" : "/"}>
 				<img
 					className="logo-img"
 					src={img}

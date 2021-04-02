@@ -22,6 +22,7 @@ const StyledFilters = styled.div`
 		border-radius: 20px;
 		overflow: scroll;
 		opacity: 0.95;
+		border: solid 2px rgba(0, 0, 0, 0.2);
 	}
 
 	.filters::-webkit-scrollbar {
@@ -52,7 +53,7 @@ const StyledFilters = styled.div`
 		letter-spacing: 1px;
 		background: rgba(136, 126, 126, 0.04);
 		padding: 2% 6%;
-		border: 2px solid rgba(0, 0, 0, 0.03);
+		border: solid 2px rgba(0, 0, 0, 0.2);
 		border-radius: 10px;
 		font-family: "Ubuntu", sans-serif;
 		outline: none;
@@ -132,7 +133,7 @@ const StyledRecipeContainer = styled.div`
 		border-radius: 12%;
 		background-color: white;
 		opacity: 0.96;
-		border: solid 2px rgba(0, 0, 0, 0.1);
+		border: solid 2px rgba(0, 0, 0, 0.2);
 	}
 `;
 

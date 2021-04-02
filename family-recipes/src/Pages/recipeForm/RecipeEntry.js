@@ -38,7 +38,9 @@ export default function RecipeEntry() {
 				"https://tt-webft-46-family-recipes.herokuapp.com/api/recipes",
 				newRecipes
 			)
-			.then((res) => {})
+			.then((res) => {
+				console.log(res);
+			})
 			.catch((err) => {
 				console.log({ err });
 			});
@@ -70,13 +72,16 @@ export default function RecipeEntry() {
 
 	const formSubmit = () => {
 		const newRecipes = {
+			user_id: 1,
 			title: formValues.title.trim(),
 			author: formValues.source.trim(),
-			ingredients: formValues.ingredients.trim(),
-			instructions: formValues.instructions.trim(),
-			category: ["dinner", "chicken", "dessert", "pasta", "other"].filter(
-				(category) => formValues[category]
-			),
+			category_name: [
+				"dinner",
+				"chicken",
+				"dessert",
+				"pasta",
+				"other",
+			].filter((category) => formValues[category]),
 		};
 
 		postNewRecipes(newRecipes);
