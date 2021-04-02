@@ -195,7 +195,7 @@ const LoginPage = ({ signedIn, signIn }) => {
           loginFormVals
         )
         .then((res) => {
-          localStorage.setItem('token', JSON.stringify(res.data))
+          localStorage.setItem('token', res.data.token)
           setLoginFormVals({ username: '', password: '' })
           signIn((signedIn) => !signedIn)
           push('/dashboard')
@@ -231,7 +231,7 @@ const LoginPage = ({ signedIn, signIn }) => {
           registerFormVals
         )
         .then((res) => {
-          localStorage.setItem('token', JSON.stringify(res.data))
+          localStorage.setItem('token', res.data.token)
           setRegisterFormVals({ username: '', password: '' })
           signIn((signedIn) => !signedIn)
           push('/dashboard')

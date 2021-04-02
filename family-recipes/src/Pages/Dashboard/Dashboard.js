@@ -1,11 +1,12 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Header from '../Header'
 import styled from 'styled-components'
 import { StyledFilters, StyledRecipeContainer } from './styles'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import DotLoader from 'react-spinners/DotLoader'
 import { css } from '@emotion/core'
 import { useHistory } from 'react-router'
+import { fetchRecipeData } from '../../store/actions'
 
 const StyledDashboard = styled.section`
   height: 100vh;
@@ -20,14 +21,17 @@ const loader = css`
 `
 
 const Dashboard = ({ signedIn, signIn }) => {
-  const { isLoading, recipes } = useSelector((state) => state)
-
-  // const [clicked, setClicked] = useState(false);
-  // const click = () => {
-  // 	setClicked((clicked) => !clicked);
-  // };
+  const { isLoading, glRecipes } = useSelector((state) => state)
 
   const { push } = useHistory()
+
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    dispatch(fetchRecipeData())
+  }, [dispatch])
+
+  console.log(glRecipes)
 
   return (
     <>
@@ -49,19 +53,15 @@ const Dashboard = ({ signedIn, signIn }) => {
         ) : (
           <StyledRecipeContainer>
             <div className="bg-img">
-              {/* <DotLoader
-								color={"#fb5c7c"}
-								loading={true}
-								css={loader}
-								size={150}
-							/> */}
-              <div className="recipe"></div>
-              <div className="recipe"></div>
-              <div className="recipe"></div>
-              <div className="recipe"></div>
-              <div className="recipe"></div>
-              <div className="recipe"></div>
-              <div className="recipe"></div>
+              {glRecipes.map((recipe, idx) => {
+                return (
+                  <div key={idx} className="recipe">
+                    <h3>{recipe.title}</h3>
+                    <h3>{recipe.category_name}</h3>
+                    <h3>{recipe.author}</h3>
+                  </div>
+                )
+              })}
             </div>
             <div
               className={
