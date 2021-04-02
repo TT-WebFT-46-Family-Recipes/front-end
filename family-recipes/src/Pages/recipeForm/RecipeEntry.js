@@ -4,9 +4,10 @@ import * as yup from 'yup'
 import RecipeForm from './RecipeForm'
 import schema from './validation/formSchema'
 // import { useHistory } from 'react-router'
-import { useSelector } from 'react-redux'
-import { useDispatch } from 'react-redux'
-import { addNewRecipe } from '../../store/actions'
+// import { useSelector } from 'react-redux'
+// import { useDispatch } from 'react-redux'
+// import { addNewRecipe } from '../../store/actions'
+import { axiosWithAuth } from '../../helper/AxiosWithAuth'
 
 const initialFormValues = {
   title: '',
@@ -33,15 +34,25 @@ export default function RecipeEntry() {
   const [formErrors, setFormErrors] = useState(initialFormErrors) // object
   const [disabled, setDisabled] = useState(initialDisabled) // boolean
 
-  const { glRecipes } = useSelector((state) => state)
-  const dispatch = useDispatch()
-  console.log(glRecipes)
+  // const { glRecipes } = useSelector((state) => state)
+  // const dispatch = useDispatch()
+  // console.log(glRecipes)
 
   //   const { push } = useHistory()
 
   const postNewRecipes = (newRecipes) => {
-    dispatch(addNewRecipe(newRecipes))
-
+    axiosWithAuth()
+      .post(
+        'https://tt-webft-46-family-recipes.herokuapp.com/api/recipes',
+        newRecipes
+      )
+      .then((res) => {
+        // console.log(res)
+      })
+      .catch((err) => {
+        console.log({ err })
+      })
+    // dispatch(addNewRecipe(newRecipes))
     // push('/dashboard')
   }
 
