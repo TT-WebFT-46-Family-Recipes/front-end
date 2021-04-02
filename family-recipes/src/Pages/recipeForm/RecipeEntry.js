@@ -1,140 +1,109 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
-import * as yup from "yup";
-import RecipeForm from "./RecipeForm";
-import schema from "./validation/formSchema";
-import { useHistory } from "react-router";
-
-////////////////////////////////////////////////
-//////////////// INITIAL STATES ////////////////
-////////////////////////////////////////////////
+import React, { useState, useEffect } from 'react'
+// import axios from 'axios'
+import * as yup from 'yup'
+import RecipeForm from './RecipeForm'
+import schema from './validation/formSchema'
+// import { useHistory } from 'react-router'
+import { useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
+import { addNewRecipe } from '../../store/actions'
 
 const initialFormValues = {
-	///// TEXT INPUTS /////
-	title: "",
-	source: "",
-	ingredients: "",
-	instructions: "",
-	///// DROPDOWN /////
-	category: "",
-};
-////////////////////////////////////////////////
-///////////// INITIAL ERROR STATES /////////////
-////////////////////////////////////////////////
-const initialFormErrors = {
-	title: "",
-	source: "",
-	ingredients: "",
-	instructions: "",
-	///// DROPDOWN /////
-	category: "",
-};
+  title: '',
+  source: '',
+  ingredients: '',
+  instructions: '',
+  category: '',
+}
 
-const initialRecipes = [];
-const initialDisabled = true;
+const initialFormErrors = {
+  title: '',
+  source: '',
+  ingredients: '',
+  instructions: '',
+  category: '',
+}
+
+// const initialRecipes = []
+const initialDisabled = true
 
 export default function RecipeEntry() {
-	////////////////////////////////////////
-	//////////////// STATES ////////////////
-	////////////////////////////////////////
+  //   const [recipes, setRecipes] = useState(initialRecipes) // array of friend objects
+  const [formValues, setFormValues] = useState(initialFormValues) // object
+  const [formErrors, setFormErrors] = useState(initialFormErrors) // object
+  const [disabled, setDisabled] = useState(initialDisabled) // boolean
 
-	const [recipes, setRecipes] = useState(initialRecipes); // array of friend objects
-	const [formValues, setFormValues] = useState(initialFormValues); // object
-	const [formErrors, setFormErrors] = useState(initialFormErrors); // object
-	const [disabled, setDisabled] = useState(initialDisabled); // boolean
+  const { glRecipes } = useSelector((state) => state)
+  const dispatch = useDispatch()
+  console.log(glRecipes)
 
-	/////////////////////////////////////////
-	//////////////// HELPERS ////////////////
-	/////////////////////////////////////////
+  //   const { push } = useHistory()
 
-	// const getRecipes = () => {
-	//   axios
-	//     .get("https://reqres.in/api/recipe")
-	//     .then((res) => {
-	//       setRecipes(res.data);
-	//     })
-	//     .catch((err) => {
-	//       console.log(err);
-	//     });
-	// };
+  const postNewRecipes = (newRecipes) => {
+    dispatch(addNewRecipe(newRecipes))
 
-	const { push } = useHistory();
+    // push('/dashboard')
+  }
 
-	const postNewRecipes = (newRecipes) => {
-		axios
-			.post("https://reqres.in/api/recipe", newRecipes)
-			.then((res) => {
-				setRecipes([res.data, ...recipes]);
-				setFormValues(initialFormValues);
-			})
-			.catch((err) => {
-				console.log(err);
-			});
+  const inputChange = (name, value) => {
+    yup
+      .reach(schema, name)
 
-		push("/dashboard");
-	};
+      .validate(value)
+      .then(() => {
+        setFormErrors({
+          ...formErrors,
+          [name]: '',
+        })
+      })
 
-	////////////////////////////////////////////////
-	//////////////// EVENT HANDLERS ////////////////
-	////////////////////////////////////////////////
-	const inputChange = (name, value) => {
-		yup.reach(schema, name)
+      .catch((err) => {
+        setFormErrors({
+          ...formErrors,
 
-			.validate(value)
-			.then(() => {
-				setFormErrors({
-					...formErrors,
-					[name]: "",
-				});
-			})
+          [name]: err.errors[0],
+        })
+      })
+    setFormValues({
+      ...formValues,
+      [name]: value,
+    })
+  }
 
-			.catch((err) => {
-				setFormErrors({
-					...formErrors,
+  const formSubmit = () => {
+    const newRecipes = {
+      title: formValues.title.trim(),
+      source: formValues.source.trim(),
+      ingredients: formValues.ingredients.trim(),
+      instructions: formValues.instructions.trim(),
 
-					[name]: err.errors[0],
-				});
-			});
-		setFormValues({
-			...formValues,
-			[name]: value,
-		});
-	};
+      category: ['dinner', 'chicken', 'dessert', 'pasta', 'other'].filter(
+        (category) => formValues[category]
+      ),
+    }
 
-	const formSubmit = () => {
-		const newRecipes = {
-			title: formValues.title.trim(),
-			source: formValues.source.trim(),
-			ingredients: formValues.ingredients.trim(),
-			instructions: formValues.instructions.trim(),
+    postNewRecipes(newRecipes)
+  }
 
-			category: ["dinner", "chicken", "dessert", "pasta", "other"].filter(
-				(category) => formValues[category]
-			),
-		};
+  // useEffect(() => {
+  //   getRecipes();
+  // }, []);
 
-		postNewRecipes(newRecipes);
-	};
+  useEffect(() => {
+    schema.isValid(formValues).then((valid) => {
+      setDisabled(!valid)
+    })
+  }, [formValues])
 
-	// useEffect(() => {
-	//   getRecipes();
-	// }, []);
-
-	useEffect(() => {
-		schema.isValid(formValues).then((valid) => {
-			setDisabled(!valid);
-		});
-	}, [formValues]);
-
-	return (
-		<div className="App">
-			<RecipeForm
-				values={formValues}
-				change={inputChange}
-				submit={formSubmit}
-				disabled={disabled}
-				errors={formErrors}
-			/>
-		</div>
-	);
+  return (
+    <div className="App">
+      <RecipeForm
+        values={formValues}
+        change={inputChange}
+        submit={formSubmit}
+        disabled={disabled}
+        errors={formErrors}
+      />
+    </div>
+  )
 }
