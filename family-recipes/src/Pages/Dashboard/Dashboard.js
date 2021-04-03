@@ -27,20 +27,22 @@ const Dashboard = ({ signedIn, signIn }) => {
 	const [checkedFilters, setCheckedFilters] = useState([]);
 	const [filteredRecipes, setFilteredRecipes] = useState(glRecipes);
 	const [searchValue, setSearchValue] = useState({ searchVal: "" });
-	const [titles, setTitles] = useState([]);
+	const [content, setContent] = useState([]);
+	const [searchedRecipeContent, setSearchedRecipeContent] = useState([]);
 	const [searching, setSearching] = useState(false);
 
 	const { push } = useHistory();
 
 	const dispatch = useDispatch();
 
-	/* keeps track of what is being searched for and hides recipe cards if searching */
+	/* keeps track of what is being searched  */
 	const search = (evt) => {
 		setSearchValue({
 			searchVal: evt.target.value,
 		});
 	};
 
+	/* toggles between searching or not searching in order to hide or display recipe cards */
 	useEffect(() => {
 		if (!isLoading) {
 			if (searchValue.searchVal === "") setSearching(false);
@@ -48,6 +50,7 @@ const Dashboard = ({ signedIn, signIn }) => {
 		}
 	}, [isLoading, searchValue]);
 
+	/* gets the recipes on each render */
 	useEffect(() => {
 		dispatch(fetchRecipeData());
 	}, [dispatch]);
@@ -85,21 +88,48 @@ const Dashboard = ({ signedIn, signIn }) => {
 		}
 	}, [isLoading, glRecipes, checkedFilters]);
 
-	/* filters through titles based on search input */
+	/* filters through content based on search input */
 	useEffect(() => {
 		if (!isLoading) {
-			const recipeTitles = glRecipes.map((recipe) => {
-				return recipe.title;
-			});
-			setTitles(
-				recipeTitles.filter((title) =>
-					title
+			const recipeContent = glRecipes.reduce((newArr, recipe) => {
+				newArr.push(recipe.title);
+				newArr.push(recipe.author);
+				return newArr;
+			}, []);
+
+			setContent(
+				recipeContent.filter((query) =>
+					query
 						.toLowerCase()
 						.includes(searchValue.searchVal.toLowerCase().trim())
 				)
 			);
 		}
 	}, [isLoading, glRecipes, searchValue]);
+
+	/* checks through searched recipes and removes duplicates */
+	useEffect(() => {
+		if (!isLoading)
+			setSearchedRecipeContent(
+				content.reduce((newArr, content) => {
+					if (
+						newArr.find(
+							(recipe) =>
+								recipe.title === content ||
+								recipe.author === content
+						) === undefined
+					)
+						newArr.push(
+							glRecipes.find(
+								(recipe) =>
+									recipe.title === content ||
+									recipe.author === content
+							)
+						);
+					return newArr;
+				}, [])
+			);
+	}, [content, glRecipes, isLoading]);
 
 	return (
 		<>
@@ -117,13 +147,13 @@ const Dashboard = ({ signedIn, signIn }) => {
 							className="searchBox"
 							name="search"
 							value={searchValue.searchVal}
-							placeholder="Search for Title:"
+							placeholder="Search:"
 							onChange={search}
 							onFocus={(evt) => {
 								evt.target.placeholder = "";
 							}}
 							onBlur={(evt) => {
-								evt.target.placeholder = "Search for Title:";
+								evt.target.placeholder = "Search:";
 							}}
 						></input>
 						<div
@@ -275,7 +305,7 @@ const Dashboard = ({ signedIn, signIn }) => {
 										);
 								  })}
 							{searching
-								? titles.map((title, idx) => {
+								? searchedRecipeContent.map((recipe, idx) => {
 										return (
 											<div
 												key={idx}
@@ -289,13 +319,7 @@ const Dashboard = ({ signedIn, signIn }) => {
 														: "recipe"
 												}
 												onClick={() =>
-													setSelectedRecipe(
-														glRecipes.find(
-															(recipe) =>
-																recipe.title ===
-																title
-														)
-													)
+													setSelectedRecipe(recipe)
 												}
 											>
 												<h3
@@ -308,13 +332,7 @@ const Dashboard = ({ signedIn, signIn }) => {
 															'Ubuntu", sans-serif',
 													}}
 												>
-													{
-														glRecipes.find(
-															(recipe) =>
-																recipe.title ===
-																title
-														).title
-													}
+													{recipe.title}
 												</h3>
 												<h4
 													align="center"
@@ -326,13 +344,7 @@ const Dashboard = ({ signedIn, signIn }) => {
 													}}
 												>
 													Category:{" "}
-													{
-														glRecipes.find(
-															(recipe) =>
-																recipe.title ===
-																title
-														).category_name
-													}
+													{recipe.category_name}
 												</h4>
 												<h5
 													align="center"
@@ -343,14 +355,7 @@ const Dashboard = ({ signedIn, signIn }) => {
 															'Ubuntu", sans-serif',
 													}}
 												>
-													Source:{" "}
-													{
-														glRecipes.find(
-															(recipe) =>
-																recipe.title ===
-																title
-														).author
-													}
+													Source: {recipe.author}
 												</h5>
 											</div>
 										);
