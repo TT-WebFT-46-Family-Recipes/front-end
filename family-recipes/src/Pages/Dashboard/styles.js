@@ -50,6 +50,7 @@ const StyledFilters = styled.div`
 		color: rgb(38, 50, 56);
 		font-weight: 600;
 		font-size: 1rem;
+		text-align: center;
 		letter-spacing: 1px;
 		background: rgba(136, 126, 126, 0.04);
 		padding: 2% 6%;
@@ -61,10 +62,6 @@ const StyledFilters = styled.div`
 
 	.searchBox:focus {
 		border: 2px solid rgba(0, 0, 0, 0.18);
-	}
-
-	.searchBox::placeholder {
-		text-align: center;
 	}
 
 	.filtersContainer {
@@ -109,6 +106,16 @@ const StyledRecipeContainer = styled.div`
 	position: fixed;
 	left: 20%;
 	border-left: solid 2px rgba(0, 0, 0, 0.1);
+
+	h2 {
+		font-size: 2.5rem;
+	}
+
+	h4 {
+	}
+
+	h5 {
+	}
 
 	.bg-img {
 		height: 89vh;

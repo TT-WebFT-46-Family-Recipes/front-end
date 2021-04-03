@@ -26,10 +26,27 @@ const Dashboard = ({ signedIn, signIn }) => {
 	const [filters, setFilters] = useState([]);
 	const [checkedFilters, setCheckedFilters] = useState([]);
 	const [filteredRecipes, setFilteredRecipes] = useState(glRecipes);
+	const [searchValue, setSearchValue] = useState({ searchVal: "" });
+	const [titles, setTitles] = useState([]);
+	const [searching, setSearching] = useState(false);
 
 	const { push } = useHistory();
 
 	const dispatch = useDispatch();
+
+	/* keeps track of what is being searched for and hides recipe cards if searching */
+	const search = (evt) => {
+		setSearchValue({
+			searchVal: evt.target.value,
+		});
+	};
+
+	useEffect(() => {
+		if (!isLoading) {
+			if (searchValue.searchVal === "") setSearching(false);
+			else if (searchValue.searchVal !== "") setSearching(true);
+		}
+	}, [isLoading, searchValue]);
 
 	useEffect(() => {
 		dispatch(fetchRecipeData());
@@ -68,6 +85,22 @@ const Dashboard = ({ signedIn, signIn }) => {
 		}
 	}, [isLoading, glRecipes, checkedFilters]);
 
+	/* filters through titles based on search input */
+	useEffect(() => {
+		if (!isLoading) {
+			const recipeTitles = glRecipes.map((recipe) => {
+				return recipe.title;
+			});
+			setTitles(
+				recipeTitles.filter((title) =>
+					title
+						.toLowerCase()
+						.includes(searchValue.searchVal.toLowerCase().trim())
+				)
+			);
+		}
+	}, [isLoading, glRecipes, searchValue]);
+
 	return (
 		<>
 			<Header signedIn={signedIn} signIn={signIn} />
@@ -83,9 +116,20 @@ const Dashboard = ({ signedIn, signIn }) => {
 						<input
 							className="searchBox"
 							name="search"
-							placeholder="search:"
+							value={searchValue.searchVal}
+							placeholder="Search for Title:"
+							onChange={search}
+							onFocus={(evt) => {
+								evt.target.placeholder = "";
+							}}
+							onBlur={(evt) => {
+								evt.target.placeholder = "Search for Title:";
+							}}
 						></input>
-						<div className="filtersContainer">
+						<div
+							className="filtersContainer"
+							style={searching ? { display: "none" } : null}
+						>
 							{isLoading
 								? null
 								: filters.map((filter, idx) => {
@@ -127,7 +171,8 @@ const Dashboard = ({ signedIn, signIn }) => {
 														"0 0 40px -10px #000",
 												}}
 												className={
-													selectedRecipe.title
+													selectedRecipe.title ||
+													searching
 														? "recipe hidden"
 														: "recipe"
 												}
@@ -182,7 +227,8 @@ const Dashboard = ({ signedIn, signIn }) => {
 														"0 0 40px -10px #000",
 												}}
 												className={
-													selectedRecipe.title
+													selectedRecipe.title ||
+													searching
 														? "recipe hidden"
 														: "recipe"
 												}
@@ -228,6 +274,88 @@ const Dashboard = ({ signedIn, signIn }) => {
 											</div>
 										);
 								  })}
+							{searching
+								? titles.map((title, idx) => {
+										return (
+											<div
+												key={idx}
+												style={{
+													boxShadow:
+														"0 0 40px -10px #000",
+												}}
+												className={
+													selectedRecipe.title
+														? "recipe hidden"
+														: "recipe"
+												}
+												onClick={() =>
+													setSelectedRecipe(
+														glRecipes.find(
+															(recipe) =>
+																recipe.title ===
+																title
+														)
+													)
+												}
+											>
+												<h3
+													align="center"
+													style={{
+														padding: "0 5%",
+														marginBottom: "15%",
+														color: "#fb5c7c",
+														fontFamily:
+															'Ubuntu", sans-serif',
+													}}
+												>
+													{
+														glRecipes.find(
+															(recipe) =>
+																recipe.title ===
+																title
+														).title
+													}
+												</h3>
+												<h4
+													align="center"
+													style={{
+														color:
+															"rgba(0, 0, 0, .7)",
+														fontFamily:
+															'Ubuntu", sans-serif',
+													}}
+												>
+													Category:{" "}
+													{
+														glRecipes.find(
+															(recipe) =>
+																recipe.title ===
+																title
+														).category_name
+													}
+												</h4>
+												<h5
+													align="center"
+													style={{
+														color:
+															"rgba(0, 0, 0, .7)",
+														fontFamily:
+															'Ubuntu", sans-serif',
+													}}
+												>
+													Source:{" "}
+													{
+														glRecipes.find(
+															(recipe) =>
+																recipe.title ===
+																title
+														).author
+													}
+												</h5>
+											</div>
+										);
+								  })
+								: null}
 						</div>
 						<div
 							style={{
@@ -251,22 +379,22 @@ const Dashboard = ({ signedIn, signIn }) => {
 							>
 								{selectedRecipe.title}
 							</h2>
-							<h4
+							<h3
 								align="center"
 								style={{
 									color: "rgba(0, 0, 0, .7)",
 								}}
 							>
 								Category: {selectedRecipe.category_name}
-							</h4>
-							<h5
+							</h3>
+							<h4
 								align="center"
 								style={{
 									color: "rgba(0, 0, 0, .7)",
 								}}
 							>
 								Source: {selectedRecipe.author}
-							</h5>
+							</h4>
 						</div>
 					</StyledRecipeContainer>
 				)}
