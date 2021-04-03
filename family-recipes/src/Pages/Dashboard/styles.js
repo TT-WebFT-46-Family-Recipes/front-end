@@ -71,7 +71,7 @@ const StyledFilters = styled.div`
 		margin: 6% 0 9%;
 		padding: 5% 0;
 		height: 57vh;
-		width: 70%;
+		width: auto;
 		display: flex;
 		flex-direction: column;
 		align-items: center;
@@ -84,14 +84,18 @@ const StyledFilters = styled.div`
 	}
 
 	.filterCheckbox {
-		width: 100%;
+		width: 8.5rem;
 		letter-spacing: 1px;
 		font-family: "Ubuntu", sans-serif;
 		font-size: 1rem;
-		margin-bottom: 5%;
+		margin: 0 auto 8%;
 		display: flex;
 		justify-content: flex-end;
-		margin-right: 35%;
+	}
+
+	label {
+		width: 100%;
+		text-align: center;
 	}
 
 	.checkbox {
