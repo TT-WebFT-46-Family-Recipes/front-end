@@ -44,7 +44,7 @@ const StyledFilters = styled.div`
 		cursor: pointer;
 	}
 
-	input {
+	.searchBox {
 		width: 75%;
 		margin: 0 0 5%;
 		color: rgb(38, 50, 56);
@@ -59,12 +59,43 @@ const StyledFilters = styled.div`
 		outline: none;
 	}
 
-	input:focus {
+	.searchBox:focus {
 		border: 2px solid rgba(0, 0, 0, 0.18);
 	}
 
-	input::placeholder {
+	.searchBox::placeholder {
 		text-align: center;
+	}
+
+	.filtersContainer {
+		margin: 6% 0 9%;
+		padding: 5% 0;
+		height: 57vh;
+		width: 70%;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		overflow: scroll;
+		scroll-behavior: smooth;
+	}
+
+	.filtersContainer::-webkit-scrollbar {
+		display: none;
+	}
+
+	.filterCheckbox {
+		width: 100%;
+		letter-spacing: 1px;
+		font-family: "Ubuntu", sans-serif;
+		font-size: 1rem;
+		margin-bottom: 5%;
+		display: flex;
+		justify-content: flex-end;
+		margin-right: 35%;
+	}
+
+	.checkbox {
+		margin-left: 8%;
 	}
 `;
 

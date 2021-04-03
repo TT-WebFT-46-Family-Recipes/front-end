@@ -62,6 +62,12 @@ export const LoginForm = ({
 						name="username"
 						value={loginVals.username}
 						onChange={updateVals}
+						onFocus={(evt) => {
+							evt.target.placeholder = "";
+						}}
+						onBlur={(evt) => {
+							evt.target.placeholder = userNamePlaceholder;
+						}}
 					></input>
 					<input
 						className="inputs"
@@ -70,6 +76,12 @@ export const LoginForm = ({
 						name="password"
 						value={loginVals.password}
 						onChange={updateVals}
+						onFocus={(evt) => {
+							evt.target.placeholder = "";
+						}}
+						onBlur={(evt) => {
+							evt.target.placeholder = passwordPlaceholder;
+						}}
 					></input>
 					<button>Sign in</button>
 					<span onClick={showRegisterForm}>Register?</span>
@@ -92,6 +104,12 @@ export const LoginForm = ({
 						name="newUserUn"
 						value={registerVals.username}
 						onChange={updateVals}
+						onFocus={(evt) => {
+							evt.target.placeholder = "";
+						}}
+						onBlur={(evt) => {
+							evt.target.placeholder = userNamePlaceholder;
+						}}
 					></input>
 					<input
 						className="inputsRegister"
@@ -100,6 +118,14 @@ export const LoginForm = ({
 						name="newUserPass"
 						value={registerVals.password}
 						onChange={updateVals}
+						onFocus={(evt) => {
+							evt.target.placeholder = "";
+							evt.target.style = "text-align: left";
+						}}
+						onBlur={(evt) => {
+							evt.target.placeholder = passwordPlaceholder;
+							evt.target.style = "text-align: center";
+						}}
 					></input>
 					<button className="btnRegister">Submit!</button>
 				</form>

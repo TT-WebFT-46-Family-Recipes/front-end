@@ -23,6 +23,9 @@ const loader = css`
 const Dashboard = ({ signedIn, signIn }) => {
 	const { isLoading, glRecipes } = useSelector((state) => state);
 	const [selectedRecipe, setSelectedRecipe] = useState({});
+	const [filters, setFilters] = useState([]);
+	const [checkedFilters, setCheckedFilters] = useState([]);
+	const [filteredRecipes, setFilteredRecipes] = useState(glRecipes);
 
 	const { push } = useHistory();
 
@@ -31,6 +34,39 @@ const Dashboard = ({ signedIn, signIn }) => {
 	useEffect(() => {
 		dispatch(fetchRecipeData());
 	}, [dispatch]);
+
+	/* creates the list of filters */
+	useEffect(() => {
+		if (!isLoading)
+			glRecipes.forEach((recipe) => {
+				if (!filters.includes(recipe.category_name))
+					setFilters([...filters, recipe.category_name]);
+			});
+	}, [glRecipes, filters, isLoading]);
+
+	/* keeps track of checked filters */
+	const applyFilter = (evt) => {
+		if (!isLoading)
+			if (evt.target.checked)
+				setCheckedFilters([...checkedFilters, evt.target.name]);
+			else
+				setCheckedFilters(
+					checkedFilters.filter(
+						(filter) => filter !== evt.target.name
+					)
+				);
+	};
+
+	/* applies checked filters */
+	useEffect(() => {
+		if (!isLoading) {
+			setFilteredRecipes(
+				glRecipes.filter((recipe) =>
+					checkedFilters.includes(recipe.category_name)
+				)
+			);
+		}
+	}, [isLoading, glRecipes, checkedFilters]);
 
 	return (
 		<>
@@ -44,24 +80,31 @@ const Dashboard = ({ signedIn, signIn }) => {
 						>
 							Add Recipe
 						</button>
-						<input name="search" placeholder="search:"></input>
-						{isLoading
-							? null
-							: glRecipes.map((recipe, idx) => {
-									return (
-										<div key={idx}>
-											<label>
-												{recipe.category_name}
-											</label>
-											<input
-												type="checkbox"
-												value={recipe.category_name}
-												name={recipe.category_name}
-											/>
-										</div>
-									);
-							  })}
-						{/* {console.log(glRecipes, "hi")} */}
+						<input
+							className="searchBox"
+							name="search"
+							placeholder="search:"
+						></input>
+						<div className="filtersContainer">
+							{isLoading
+								? null
+								: filters.map((filter, idx) => {
+										return (
+											<div
+												className="filterCheckbox"
+												key={idx}
+											>
+												<label>{filter}</label>
+												<input
+													className="checkbox"
+													type="checkbox"
+													name={filter}
+													onChange={applyFilter}
+												/>
+											</div>
+										);
+								  })}
+						</div>
 					</div>
 				</StyledFilters>
 				{isLoading ? (
@@ -74,57 +117,117 @@ const Dashboard = ({ signedIn, signIn }) => {
 				) : (
 					<StyledRecipeContainer>
 						<div className="bg-img">
-							{glRecipes.map((recipe, idx) => {
-								return (
-									<div
-										key={idx}
-										style={{
-											boxShadow: "0 0 40px -10px #000",
-										}}
-										className={
-											selectedRecipe.title
-												? "recipe hidden"
-												: "recipe"
-										}
-										onClick={() =>
-											setSelectedRecipe(recipe)
-										}
-									>
-										<h3
-											align="center"
-											style={{
-												padding: "0 5%",
-												marginBottom: "15%",
-												color: "#fb5c7c",
-												fontFamily:
-													'Ubuntu", sans-serif',
-											}}
-										>
-											{recipe.title}
-										</h3>
-										<h4
-											align="center"
-											style={{
-												color: "rgba(0, 0, 0, .7)",
-												fontFamily:
-													'Ubuntu", sans-serif',
-											}}
-										>
-											Category: {recipe.category_name}
-										</h4>
-										<h5
-											align="center"
-											style={{
-												color: "rgba(0, 0, 0, .7)",
-												fontFamily:
-													'Ubuntu", sans-serif',
-											}}
-										>
-											Source: {recipe.author}
-										</h5>
-									</div>
-								);
-							})}
+							{checkedFilters.length !== 0
+								? filteredRecipes.map((recipe, idx) => {
+										return (
+											<div
+												key={idx}
+												style={{
+													boxShadow:
+														"0 0 40px -10px #000",
+												}}
+												className={
+													selectedRecipe.title
+														? "recipe hidden"
+														: "recipe"
+												}
+												onClick={() =>
+													setSelectedRecipe(recipe)
+												}
+											>
+												<h3
+													align="center"
+													style={{
+														padding: "0 5%",
+														marginBottom: "15%",
+														color: "#fb5c7c",
+														fontFamily:
+															'Ubuntu", sans-serif',
+													}}
+												>
+													{recipe.title}
+												</h3>
+												<h4
+													align="center"
+													style={{
+														color:
+															"rgba(0, 0, 0, .7)",
+														fontFamily:
+															'Ubuntu", sans-serif',
+													}}
+												>
+													Category:{" "}
+													{recipe.category_name}
+												</h4>
+												<h5
+													align="center"
+													style={{
+														color:
+															"rgba(0, 0, 0, .7)",
+														fontFamily:
+															'Ubuntu", sans-serif',
+													}}
+												>
+													Source: {recipe.author}
+												</h5>
+											</div>
+										);
+								  })
+								: glRecipes.map((recipe, idx) => {
+										return (
+											<div
+												key={idx}
+												style={{
+													boxShadow:
+														"0 0 40px -10px #000",
+												}}
+												className={
+													selectedRecipe.title
+														? "recipe hidden"
+														: "recipe"
+												}
+												onClick={() =>
+													setSelectedRecipe(recipe)
+												}
+											>
+												<h3
+													align="center"
+													style={{
+														padding: "0 5%",
+														marginBottom: "15%",
+														color: "#fb5c7c",
+														fontFamily:
+															'Ubuntu", sans-serif',
+													}}
+												>
+													{recipe.title}
+												</h3>
+												<h4
+													align="center"
+													style={{
+														color:
+															"rgba(0, 0, 0, .7)",
+														fontFamily:
+															'Ubuntu", sans-serif',
+													}}
+												>
+													Category:{" "}
+													{recipe.category_name}
+												</h4>
+												<h5
+													align="center"
+													style={{
+														color:
+															"rgba(0, 0, 0, .7)",
+														fontFamily:
+															'Ubuntu", sans-serif',
+													}}
+												>
+													Source: {recipe.author}
+												</h5>
+											</div>
+										);
+								  })}
 						</div>
 						<div
 							style={{
