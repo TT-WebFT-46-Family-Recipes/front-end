@@ -1,107 +1,91 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react'
 // import axios from 'axios'
-import * as yup from "yup";
-import RecipeForm from "./RecipeForm";
-import schema from "./validation/formSchema";
-// import { useHistory } from 'react-router'
-// import { useSelector } from 'react-redux'
-// import { useDispatch } from 'react-redux'
-// import { addNewRecipe } from '../../store/actions'
-import { axiosWithAuth } from "../../helper/AxiosWithAuth";
+import * as yup from 'yup'
+import RecipeForm from './RecipeForm'
+import schema from './validation/formSchema'
+import { useDispatch } from 'react-redux'
+import { addNewRecipe } from '../../store/actions'
 
 const initialFormValues = {
-	title: "",
-	source: "",
-	ingredients: "",
-	instructions: "",
-	category: "",
-};
+  title: '',
+  source: '',
+  ingredients: '',
+  instructions: '',
+  category_name: '',
+}
 
 const initialFormErrors = {
-	title: "",
-	source: "",
-	ingredients: "",
-	instructions: "",
-	category: "",
-};
+  title: '',
+  source: '',
+  ingredients: '',
+  instructions: '',
+  category_name: '',
+}
 
-const initialDisabled = true;
+const initialDisabled = true
 
 export default function RecipeEntry() {
-	const [formValues, setFormValues] = useState(initialFormValues); // object
-	const [formErrors, setFormErrors] = useState(initialFormErrors); // object
-	const [disabled, setDisabled] = useState(initialDisabled); // boolean
+  const [formValues, setFormValues] = useState(initialFormValues) // object
+  const [formErrors, setFormErrors] = useState(initialFormErrors) // object
+  const [disabled, setDisabled] = useState(initialDisabled) // boolean
 
-	const postNewRecipes = (newRecipes) => {
-		axiosWithAuth()
-			.post(
-				"https://tt-webft-46-family-recipes.herokuapp.com/api/recipes",
-				newRecipes
-			)
-			.then((res) => {
-				console.log(res);
-			})
-			.catch((err) => {
-				console.log({ err });
-			});
-	};
+  const dispatch = useDispatch()
 
-	const inputChange = (name, value) => {
-		yup.reach(schema, name)
+  const postNewRecipes = (newRecipes) => {
+    dispatch(addNewRecipe(newRecipes))
+  }
 
-			.validate(value)
-			.then(() => {
-				setFormErrors({
-					...formErrors,
-					[name]: "",
-				});
-			})
+  const inputChange = (name, value) => {
+    yup
+      .reach(schema, name)
 
-			.catch((err) => {
-				setFormErrors({
-					...formErrors,
+      .validate(value)
+      .then(() => {
+        setFormErrors({
+          ...formErrors,
+          [name]: '',
+        })
+      })
 
-					[name]: err.errors[0],
-				});
-			});
-		setFormValues({
-			...formValues,
-			[name]: value,
-		});
-	};
+      .catch((err) => {
+        setFormErrors({
+          ...formErrors,
 
-	const formSubmit = () => {
-		const newRecipes = {
-			user_id: 1,
-			title: formValues.title.trim(),
-			author: formValues.source.trim(),
-			category_name: [
-				"dinner",
-				"chicken",
-				"dessert",
-				"pasta",
-				"other",
-			].filter((category) => formValues[category]),
-		};
+          [name]: err.errors[0],
+        })
+      })
+    setFormValues({
+      ...formValues,
+      [name]: value,
+    })
+  }
 
-		postNewRecipes(newRecipes);
-	};
+  const formSubmit = () => {
+    const newRecipes = {
+      user_id: 1,
+      title: formValues.title.trim(),
+      author: formValues.source.trim(),
+      category_name: formValues.category_name.trim(),
+    }
 
-	useEffect(() => {
-		schema.isValid(formValues).then((valid) => {
-			setDisabled(!valid);
-		});
-	}, [formValues]);
+    postNewRecipes(newRecipes)
+  }
 
-	return (
-		<div className="App">
-			<RecipeForm
-				values={formValues}
-				change={inputChange}
-				submit={formSubmit}
-				disabled={disabled}
-				errors={formErrors}
-			/>
-		</div>
-	);
+  useEffect(() => {
+    schema.isValid(formValues).then((valid) => {
+      setDisabled(!valid)
+    })
+  }, [formValues])
+
+  return (
+    <div className="App">
+      <RecipeForm
+        values={formValues}
+        change={inputChange}
+        submit={formSubmit}
+        disabled={disabled}
+        errors={formErrors}
+      />
+    </div>
+  )
 }
