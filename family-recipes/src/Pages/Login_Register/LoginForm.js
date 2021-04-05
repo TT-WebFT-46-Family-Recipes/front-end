@@ -120,11 +120,9 @@ export const LoginForm = ({
 						onChange={updateVals}
 						onFocus={(evt) => {
 							evt.target.placeholder = "";
-							evt.target.style = "text-align: left";
 						}}
 						onBlur={(evt) => {
 							evt.target.placeholder = passwordPlaceholder;
-							evt.target.style = "text-align: center";
 						}}
 					></input>
 					<button className="btnRegister">Submit!</button>
