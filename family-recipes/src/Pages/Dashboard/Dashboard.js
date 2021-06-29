@@ -6,10 +6,7 @@ import { useSelector, useDispatch } from "react-redux";
 import DotLoader from "react-spinners/DotLoader";
 import { css } from "@emotion/core";
 import { useHistory } from "react-router";
-import {
-	fetchRecipeData,
-	// deleteRecipe
-} from "../../store/actions";
+import { fetchRecipeData, deleteRecipe } from "../../store/actions";
 
 const StyledDashboard = styled.section`
 	height: 100vh;
@@ -70,23 +67,16 @@ const Dashboard = ({ signedIn, signIn }) => {
 	/* keeps track of checked filters */
 	const applyFilter = (evt) => {
 		if (!isLoading)
-			if (evt.target.checked)
-				setCheckedFilters([...checkedFilters, evt.target.name]);
+			if (evt.target.checked) setCheckedFilters([...checkedFilters, evt.target.name]);
 			else
-				setCheckedFilters(
-					checkedFilters.filter(
-						(filter) => filter !== evt.target.name
-					)
-				);
+				setCheckedFilters(checkedFilters.filter((filter) => filter !== evt.target.name));
 	};
 
 	/* applies checked filters */
 	useEffect(() => {
 		if (!isLoading) {
 			setFilteredRecipes(
-				glRecipes.filter((recipe) =>
-					checkedFilters.includes(recipe.category_name)
-				)
+				glRecipes.filter((recipe) => checkedFilters.includes(recipe.category_name))
 			);
 		}
 	}, [isLoading, glRecipes, checkedFilters]);
@@ -102,9 +92,7 @@ const Dashboard = ({ signedIn, signIn }) => {
 
 			setContent(
 				recipeContent.filter((query) =>
-					query
-						.toLowerCase()
-						.includes(searchValue.searchVal.toLowerCase().trim())
+					query.toLowerCase().includes(searchValue.searchVal.toLowerCase().trim())
 				)
 			);
 		}
@@ -115,21 +103,19 @@ const Dashboard = ({ signedIn, signIn }) => {
 		if (!isLoading)
 			setSearchedRecipeContent(
 				content.reduce((newArr, content) => {
-					if (
-						newArr.find(
-							(recipe) =>
-								recipe.title === content ||
-								recipe.author === content
-						) === undefined
-					)
-						newArr.push(
-							glRecipes.find(
-								(recipe) =>
-									recipe.title === content ||
-									recipe.author === content
-							)
-						);
-					return newArr;
+					try {
+						if (
+							newArr.find(
+								(recipe) => recipe.title === content || recipe.author === content
+							) === undefined
+						)
+							newArr.push(
+								glRecipes.find(
+									(recipe) => recipe.title === content || recipe.author === content
+								)
+							);
+						return newArr;
+					} catch {}
 				}, [])
 			);
 	}, [content, glRecipes, isLoading]);
@@ -140,10 +126,7 @@ const Dashboard = ({ signedIn, signIn }) => {
 			<StyledDashboard>
 				<StyledFilters>
 					<div className="filters">
-						<button
-							onClick={() => push("/newrecipe")}
-							className="new-recipe-btn"
-						>
+						<button onClick={() => push("/newrecipe")} className="new-recipe-btn">
 							Add Recipe
 						</button>
 						<input
@@ -167,10 +150,7 @@ const Dashboard = ({ signedIn, signIn }) => {
 								? null
 								: filters.map((filter, idx) => {
 										return (
-											<div
-												className="filterCheckbox"
-												key={idx}
-											>
+											<div className="filterCheckbox" key={idx}>
 												<label>{filter}</label>
 												<input
 													className="checkbox"
@@ -185,12 +165,7 @@ const Dashboard = ({ signedIn, signIn }) => {
 					</div>
 				</StyledFilters>
 				{isLoading ? (
-					<DotLoader
-						color={"#fb5c7c"}
-						loading={true}
-						css={loader}
-						size={150}
-					/>
+					<DotLoader color={"#fb5c7c"} loading={true} css={loader} size={150} />
 				) : (
 					<StyledRecipeContainer>
 						<div className="bg-img">
@@ -200,18 +175,12 @@ const Dashboard = ({ signedIn, signIn }) => {
 											<div
 												key={idx}
 												style={{
-													boxShadow:
-														"0 0 40px -10px #000",
+													boxShadow: "0 0 40px -10px #000",
 												}}
 												className={
-													selectedRecipe.title ||
-													searching
-														? "recipe hidden"
-														: "recipe"
+													selectedRecipe.title || searching ? "recipe hidden" : "recipe"
 												}
-												onClick={() =>
-													setSelectedRecipe(recipe)
-												}
+												onClick={() => setSelectedRecipe(recipe)}
 											>
 												<h3
 													align="center"
@@ -219,8 +188,7 @@ const Dashboard = ({ signedIn, signIn }) => {
 														padding: "0 5%",
 														marginBottom: "15%",
 														color: "#fb5c7c",
-														fontFamily:
-															'Ubuntu", sans-serif',
+														fontFamily: 'Ubuntu", sans-serif',
 													}}
 												>
 													{recipe.title}
@@ -228,22 +196,17 @@ const Dashboard = ({ signedIn, signIn }) => {
 												<h4
 													align="center"
 													style={{
-														color:
-															"rgba(0, 0, 0, .7)",
-														fontFamily:
-															'Ubuntu", sans-serif',
+														color: "rgba(0, 0, 0, .7)",
+														fontFamily: 'Ubuntu", sans-serif',
 													}}
 												>
-													Category:{" "}
-													{recipe.category_name}
+													Category: {recipe.category_name}
 												</h4>
 												<h5
 													align="center"
 													style={{
-														color:
-															"rgba(0, 0, 0, .7)",
-														fontFamily:
-															'Ubuntu", sans-serif',
+														color: "rgba(0, 0, 0, .7)",
+														fontFamily: 'Ubuntu", sans-serif',
 													}}
 												>
 													Source: {recipe.author}
@@ -256,18 +219,12 @@ const Dashboard = ({ signedIn, signIn }) => {
 											<div
 												key={idx}
 												style={{
-													boxShadow:
-														"0 0 40px -10px #000",
+													boxShadow: "0 0 40px -10px #000",
 												}}
 												className={
-													selectedRecipe.title ||
-													searching
-														? "recipe hidden"
-														: "recipe"
+													selectedRecipe.title || searching ? "recipe hidden" : "recipe"
 												}
-												onClick={() =>
-													setSelectedRecipe(recipe)
-												}
+												onClick={() => setSelectedRecipe(recipe)}
 											>
 												<h3
 													align="center"
@@ -275,8 +232,7 @@ const Dashboard = ({ signedIn, signIn }) => {
 														padding: "0 5%",
 														marginBottom: "15%",
 														color: "#fb5c7c",
-														fontFamily:
-															'Ubuntu", sans-serif',
+														fontFamily: 'Ubuntu", sans-serif',
 													}}
 												>
 													{recipe.title}
@@ -284,22 +240,17 @@ const Dashboard = ({ signedIn, signIn }) => {
 												<h4
 													align="center"
 													style={{
-														color:
-															"rgba(0, 0, 0, .7)",
-														fontFamily:
-															'Ubuntu", sans-serif',
+														color: "rgba(0, 0, 0, .7)",
+														fontFamily: 'Ubuntu", sans-serif',
 													}}
 												>
-													Category:{" "}
-													{recipe.category_name}
+													Category: {recipe.category_name}
 												</h4>
 												<h5
 													align="center"
 													style={{
-														color:
-															"rgba(0, 0, 0, .7)",
-														fontFamily:
-															'Ubuntu", sans-serif',
+														color: "rgba(0, 0, 0, .7)",
+														fontFamily: 'Ubuntu", sans-serif',
 													}}
 												>
 													Source: {recipe.author}
@@ -307,11 +258,7 @@ const Dashboard = ({ signedIn, signIn }) => {
 												{/* <button
 													onClick={(evt) => {
 														evt.preventDefault();
-														dispatch(
-															deleteRecipe(
-																recipe.id
-															)
-														);
+														dispatch(deleteRecipe(recipe.id));
 													}}
 												>
 													delete
@@ -325,17 +272,10 @@ const Dashboard = ({ signedIn, signIn }) => {
 											<div
 												key={idx}
 												style={{
-													boxShadow:
-														"0 0 40px -10px #000",
+													boxShadow: "0 0 40px -10px #000",
 												}}
-												className={
-													selectedRecipe.title
-														? "recipe hidden"
-														: "recipe"
-												}
-												onClick={() =>
-													setSelectedRecipe(recipe)
-												}
+												className={selectedRecipe.title ? "recipe hidden" : "recipe"}
+												onClick={() => setSelectedRecipe(recipe)}
 											>
 												<h3
 													align="center"
@@ -343,8 +283,7 @@ const Dashboard = ({ signedIn, signIn }) => {
 														padding: "0 5%",
 														marginBottom: "15%",
 														color: "#fb5c7c",
-														fontFamily:
-															'Ubuntu", sans-serif',
+														fontFamily: 'Ubuntu", sans-serif',
 													}}
 												>
 													{recipe.title}
@@ -352,22 +291,17 @@ const Dashboard = ({ signedIn, signIn }) => {
 												<h4
 													align="center"
 													style={{
-														color:
-															"rgba(0, 0, 0, .7)",
-														fontFamily:
-															'Ubuntu", sans-serif',
+														color: "rgba(0, 0, 0, .7)",
+														fontFamily: 'Ubuntu", sans-serif',
 													}}
 												>
-													Category:{" "}
-													{recipe.category_name}
+													Category: {recipe.category_name}
 												</h4>
 												<h5
 													align="center"
 													style={{
-														color:
-															"rgba(0, 0, 0, .7)",
-														fontFamily:
-															'Ubuntu", sans-serif',
+														color: "rgba(0, 0, 0, .7)",
+														fontFamily: 'Ubuntu", sans-serif',
 													}}
 												>
 													Source: {recipe.author}
@@ -381,11 +315,7 @@ const Dashboard = ({ signedIn, signIn }) => {
 							style={{
 								boxShadow: "0 0 40px -10px #000",
 							}}
-							className={
-								selectedRecipe.title
-									? "recipe-modal"
-									: "recipe-modal hidden"
-							}
+							className={selectedRecipe.title ? "recipe-modal" : "recipe-modal hidden"}
 							onClick={() => setSelectedRecipe({})}
 						>
 							<h2
